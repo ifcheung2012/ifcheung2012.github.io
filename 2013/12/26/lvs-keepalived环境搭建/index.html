@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>lvs+keepalived环境搭建 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="1.1    keepalived服务介绍keepalived起初是为LVS设计的,专门用来监控集群系统中各个服务节点的状态,后来又加入了VRRP的功能，VRRP是Virtual Router Redundancy Protocol（虚拟路由器冗余协议）的缩写，VRRP出现的目的就是为了解决静态路由出现的单点故障问题，它能够保证网络的不间断、稳定的运行。所以，keepalived一方面具有服务器健">
+<meta property="og:type" content="article">
+<meta property="og:title" content="lvs+keepalived环境搭建">
+<meta property="og:url" content="http://yoursite.com/2013/12/26/lvs-keepalived环境搭建/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="1.1    keepalived服务介绍keepalived起初是为LVS设计的,专门用来监控集群系统中各个服务节点的状态,后来又加入了VRRP的功能，VRRP是Virtual Router Redundancy Protocol（虚拟路由器冗余协议）的缩写，VRRP出现的目的就是为了解决静态路由出现的单点故障问题，它能够保证网络的不间断、稳定的运行。所以，keepalived一方面具有服务器健">
+<meta property="og:image" content="http://gitimg.qiniudn.com/diary_lvs_article2_001.png">
+<meta property="og:image" content="http://gitimg.qiniudn.com/diary_lvs_article2_002.png">
+<meta property="og:image" content="http://gitimg.qiniudn.com/diary_lvs_article2_003.png">
+<meta property="og:image" content="http://gitimg.qiniudn.com/diary_lvs_article2_004.png">
+<meta property="og:updated_time" content="2014-11-22T07:54:12.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="lvs+keepalived环境搭建">
+<meta name="twitter:description" content="1.1    keepalived服务介绍keepalived起初是为LVS设计的,专门用来监控集群系统中各个服务节点的状态,后来又加入了VRRP的功能，VRRP是Virtual Router Redundancy Protocol（虚拟路由器冗余协议）的缩写，VRRP出现的目的就是为了解决静态路由出现的单点故障问题，它能够保证网络的不间断、稳定的运行。所以，keepalived一方面具有服务器健">
+  
+    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="null" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">John Doe</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="/#" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="/#" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="/#" title="rss">rss</a>
+					        
+								<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/EAS/" style="font-size: 10px;">EAS</a> <a href="/tags/ERP/" style="font-size: 15px;">ERP</a> <a href="/tags/INTERNET/" style="font-size: 10px;">INTERNET</a> <a href="/tags/KINGDEE/" style="font-size: 10px;">KINGDEE</a> <a href="/tags/LINUX/" style="font-size: 10px;">LINUX</a> <a href="/tags/MANAGEMENT/" style="font-size: 10px;">MANAGEMENT</a> <a href="/tags/PMP/" style="font-size: 10px;">PMP</a> <a href="/tags/TEAM/" style="font-size: 15px;">TEAM</a> <a href="/tags/archlinux/" style="font-size: 10px;">archlinux</a> <a href="/tags/centos/" style="font-size: 10px;">centos</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/linux/" style="font-size: 20px;">linux</a> <a href="/tags/linux-mysql-rsync-nfs-ssh/" style="font-size: 10px;">linux,mysql,rsync,nfs,ssh</a> <a href="/tags/lvs-keepalived-linux/" style="font-size: 10px;">lvs,keepalived,linux</a> <a href="/tags/lvs-linux-web/" style="font-size: 10px;">lvs,linux,web</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/mysql-binlog-recovery-shell/" style="font-size: 10px;">mysql,binlog,recovery,shell</a> <a href="/tags/mysql-engine/" style="font-size: 10px;">mysql,engine</a> <a href="/tags/mysql-trouble/" style="font-size: 10px;">mysql,trouble</a> <a href="/tags/python/" style="font-size: 15px;">python</a> <a href="/tags/router/" style="font-size: 10px;">router</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/team/" style="font-size: 10px;">team</a> <a href="/tags/运维/" style="font-size: 10px;">运维</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a> <a href="/tags/项目经理/" style="font-size: 10px;">项目经理</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">奥巴马的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">卡卡的美丽传说</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">本泽马的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">吉格斯的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">习大大大不同</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">托蒂的博客</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">我是谁，我从哪里来，我到哪里去？我就是我，是颜色不一样的吃货…</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">John Doe</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="null" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">John Doe</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="/#" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="/#" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/#" title="rss">rss</a>
+			        
+						<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-lvs-keepalived环境搭建" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2013/12/26/lvs-keepalived环境搭建/" class="article-date">
+  	<time datetime="2013-12-26T14:39:36.000Z" itemprop="datePublished">2013-12-26</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      lvs+keepalived环境搭建
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/lvs-keepalived-linux/">lvs,keepalived,linux</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="1-1_keepalived服务介绍">1.1    keepalived服务介绍</h2><p>keepalived起初是为LVS设计的,专门用来监控集群系统中各个服务节点的状态,后来又加入了VRRP的功能，VRRP是Virtual Router Redundancy Protocol（虚拟路由器冗余协议）的缩写，VRRP出现的目的就是为了解决静态路由出现的单点故障问题，它能够保证网络的不间断、稳定的运行。所以，keepalived一方面具有服务器健康检测功能，另一方面也具有HA cluster功能。 </p>
+<p>Keepalived的官方站点:<a href="http://www.keepalived.org" target="_blank" rel="external">http://www.keepalived.org</a> </p>
+<a id="more"></a>
+<h2 id="1-2_keepalived服务的两大用途：healthcheck_&amp;_failover">1.2    keepalived服务的两大用途：healthcheck &amp; failover</h2><h3 id="1-2-1_LVS_directors_failover功能">1.2.1    LVS directors failover功能</h3><p>ha failover功能：实现LB Master主机和Backup主机之间故障转移和自动切换。</p>
+<p>这是针对有两个负载均衡器director同时工作而采用的故障转移措施。</p>
+<p>失败切换，这是针对负载均衡器Director 采取的措施，在有两个负载均衡器Director的应用场景，当主负载均衡器（MASTER）失效或出现故障，备份负载均衡器（BACKUP）将自动接管主负载均衡器的工作；一旦主负载均衡器故障修复，两者将恢复到最初的角色状态。</p>
+<h3 id="1-2-2_LVS_directors_failover功能原理图">1.2.2    LVS directors failover功能原理图</h3><p>keepalived 集群正常工作双主架构简图</p>
+<p>略</p>
+<h3 id="1-2-3_LVS_cluster_nodes_healthchecks功能">1.2.3    LVS cluster nodes healthchecks功能</h3><p>rs healthcheck功能：负载均衡定期检查RS的可用性决定是否给其分发请求。<br>当虚拟服务器中的某一个甚至是几个真是服务器同时发生故障无法提供服务时，负载均衡器会自动将失效的RS服务器从转发队列中清除出去，从而保证用户的访问不受影响；当故障的RS服务器被修复以后，系统又会自动地把他们加入转发队列，分发请求提供正常服务。</p>
+<h3 id="1-2-4_keepalived_故障切换转移原理介绍">1.2.4    keepalived 故障切换转移原理介绍</h3><p>keepalived directors之间的故障切换转移，是通过VRRP协议（virtual Router Redundancy Protocol 虚拟路由器冗余协议）来实现的。</p>
+<p>在keepalived directors正常工作时，主director节点会不断的向备节点广播心跳消息，用以告诉备节点自己还活着，当主机节点发生故障时，备节点就无法继续检测到主节点的心跳，进而调用自身的接管程序，接管主节点的IP资源及服务。而当主节点恢复故障时，备节点会释放主节点故障时自身接管的IP资源及服务，恢复到原来的自身的备用角色。</p>
+<p><strong> 那么什么是VRRP协议呢？</strong></p>
+<h3 id="1-2-5_VRRP协议简单介绍">1.2.5    VRRP协议简单介绍</h3><p>虚拟路由器冗余协议（VRRP）是一种选择协议，它可以把一个虚拟路由器的责任动态分配到局域网上的 VRRP 路由器中的一台。控制虚拟路由器 IP 地址的 VRRP 路由器称为主路由器，它负责转发数据包到这些虚拟 IP 地址。一旦主路由器不可用，这种选择过程就提供了动态的故障转移机制，这就允许虚拟路由器的 IP 地址可以作为终端主机的默认第一跳路由器。使用 VRRP 的好处是有更高的默认路径的可用性而无需在每个终端主机上配置动态路由或路由发现协议。 VRRP 包封装在 IP 包中发送。</p>
+<p><a href="http://bbs.ywlm.net/thread-790-1-1.html" target="_blank" rel="external">http://bbs.ywlm.net/thread-790-1-1.html</a></p>
+<h1 id="2_构建高可用lvs服务">2    构建高可用lvs服务</h1><h2 id="2-1_下载并安装keepalived">2.1    下载并安装keepalived</h2><p>提示：安装前请确认路径：–with-kernel-dir=/usr/src/linux如果没有该路径，请链接内核路径：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@centos-vip keepalived-<span class="number">1.1</span><span class="number">.17</span>]<span class="preprocessor"># ln -s /usr/src/kernels/<span class="number">2.6</span><span class="number">.18</span>-<span class="number">308.</span>el5-i686/ /usr/src/linux</span></span><br><span class="line">[root@centos-vip keepalived-<span class="number">1.1</span><span class="number">.17</span>]<span class="preprocessor">#</span></span><br><span class="line">如果存在以上内核路径，直接./configure就OK了，否则要将 --with-kernel-dir 添加到./configure 命令之后；</span><br></pre></td></tr></table></figure></p>
+<p>下载并安装；<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">[root<span class="constant">@centos</span>-vip ~]<span class="preprocessor"># wget </span></span><br><span class="line">http://www.keepalived.org/software/keepalived-<span class="number">1.1</span><span class="number">.17</span>.tar.gz</span><br><span class="line">connected.</span><br><span class="line">HTTP request sent, awaiting response... <span class="number">200</span> OK</span><br><span class="line">Length: <span class="number">238195</span> (<span class="number">233</span>K) [application/x-gzip]</span><br><span class="line">Saving <span class="keyword">to</span>: `keepalived-<span class="number">1.1</span><span class="number">.17</span>.tar.gz<span class="string">'</span><br><span class="line"></span><br><span class="line">100%[======================================&gt;] 238,195      111K/s   in 2.1s    </span><br><span class="line"></span><br><span class="line">2013-10-07 06:55:43 (111 KB/s) - `keepalived-1.1.17.tar.gz'</span> saved [<span class="number">238195</span>/<span class="number">238195</span>]</span><br><span class="line"></span><br><span class="line">[root<span class="constant">@centos</span>-vip ~]<span class="preprocessor"># tar zxf keepalived-1.1.17.tar.gz </span></span><br><span class="line">[root<span class="constant">@centos</span>-vip ~]<span class="preprocessor">#./configure     #如果出现无法引用openssl头文件，那就要yum install openssl-devel -y 了；</span></span><br><span class="line">Keepalived configuration</span><br><span class="line">------------------------</span><br><span class="line">Keepalived version       : <span class="number">1.1</span><span class="number">.17</span></span><br><span class="line">Compiler                 : gcc</span><br><span class="line">Compiler flags           : -g -O2</span><br><span class="line">Extra Lib                : -lpopt -lssl -lcrypto </span><br><span class="line">Use IPVS Framework       : Yes   <span class="preprocessor">#LVS功能</span></span><br><span class="line">IPVS sync daemon support : Yes     <span class="preprocessor">#LVS功能</span></span><br><span class="line">Use VRRP Framework       : Yes   <span class="preprocessor">#VRRP功能</span></span><br><span class="line">Use LinkWatch            : No</span><br><span class="line">Use Debug flags          : No</span><br><span class="line">[root<span class="constant">@centos</span>-vip keepalived-<span class="number">1.1</span><span class="number">.17</span>]<span class="preprocessor">#</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="2-2_编译参数说明">2.2    编译参数说明</h2><figure class="highlight haml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@centos-vip keepalived-1.1.17]# ./configure --help</span><br><span class="line">-<span class="ruby">-with-kernel-dir=<span class="constant">DIR</span>   path to linux kernel source directory  这是个很重要的参数，但这个参数并不是要把keepalived编译进内核，而是指定使用内核源码里的头文件。如果使用<span class="constant">LVS</span>时，才需要用到此参数，否则不需要。</span><br><span class="line"></span>-<span class="ruby">-disable-lvs-syncd     <span class="keyword">do</span> <span class="keyword">not</span> use <span class="constant">LVS</span> synchronization daemon</span><br><span class="line"></span>-<span class="ruby">-disable-lvs           <span class="keyword">do</span> <span class="keyword">not</span> use the <span class="constant">LVS</span> framework</span><br><span class="line"></span>-<span class="ruby">-disable-vrrp          <span class="keyword">do</span> <span class="keyword">not</span> use the <span class="constant">VRRP</span> framework</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>提示：如果只想做keepalived其他服务（http,db,nginx,haproxy）高可用而不做LVS的高可用，可以使用–disable-lvs和–disable-lvs-syncd禁止LVS功能，本文既要单独演示keepalived高可用服务，又要演示Lvs高可用服务，因此，不加这个参数。</p>
+</blockquote>
+<h2 id="2-3_配置规范启动">2.3    配置规范启动</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@centos-vip keepalived-<span class="number">1.1</span><span class="number">.17</span>]<span class="preprocessor"># /bin/cp /usr/local/etc/rc.d/init.d/keepalived /etc/init.d/</span></span><br><span class="line">[root@centos-vip keepalived-<span class="number">1.1</span><span class="number">.17</span>]<span class="preprocessor"># /bin/cp /usr/local/etc/sysconfig/keepalived /etc/sysconfig/</span></span><br><span class="line">[root@centos-vip keepalived-<span class="number">1.1</span><span class="number">.17</span>]<span class="preprocessor"># mkdir /etc/keepalived</span></span><br><span class="line">[root@centos-vip keepalived-<span class="number">1.1</span><span class="number">.17</span>]<span class="preprocessor"># /bin/cp /usr/local/etc/keepalived/keepalived.conf /etc/keepalived/</span></span><br><span class="line">[root@centos-vip keepalived-<span class="number">1.1</span><span class="number">.17</span>]<span class="preprocessor"># /bin/cp /usr/local/sbin/keepalived /usr/sbin/</span></span><br><span class="line">[root@centos-vip keepalived-<span class="number">1.1</span><span class="number">.17</span>]<span class="preprocessor">#</span></span><br></pre></td></tr></table></figure>
+<p><strong> 启动或停止：</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@centos-vip keepalived-<span class="number">1.1</span><span class="number">.17</span>]<span class="preprocessor"># /etc/init.d/keepalived start</span></span><br><span class="line">Starting keepalived: [  OK  ]</span><br><span class="line">[root@centos-vip ~]<span class="preprocessor"># ps aux| grep keep</span></span><br><span class="line">root      <span class="number">4756</span>  <span class="number">0.0</span>  <span class="number">0.0</span>   <span class="number">5040</span>   <span class="number">660</span> ?        Ss   <span class="number">17</span>:<span class="number">32</span>   <span class="number">0</span>:<span class="number">00</span> keepalived -D</span><br><span class="line">root      <span class="number">4758</span>  <span class="number">0.1</span>  <span class="number">0.1</span>   <span class="number">5112</span>  <span class="number">1552</span> ?        S    <span class="number">17</span>:<span class="number">32</span>   <span class="number">0</span>:<span class="number">00</span> keepalived -D</span><br><span class="line">root      <span class="number">4760</span>  <span class="number">0.1</span>  <span class="number">0.1</span>   <span class="number">5112</span>  <span class="number">1108</span> ?        S    <span class="number">17</span>:<span class="number">32</span>   <span class="number">0</span>:<span class="number">00</span> keepalived -D</span><br><span class="line">root      <span class="number">4770</span>  <span class="number">0.0</span>  <span class="number">0.0</span>   <span class="number">4020</span>   <span class="number">696</span> pts/<span class="number">0</span>    R+   <span class="number">17</span>:<span class="number">32</span>   <span class="number">0</span>:<span class="number">00</span> grep keep</span><br><span class="line">[root@centos-vip ~]<span class="preprocessor">#</span></span><br><span class="line">[root@centos-vip keepalived-<span class="number">1.1</span><span class="number">.17</span>]<span class="preprocessor"># /etc/init.d/keepalived stop</span></span><br><span class="line">Stopping keepalived: [  OK  ]</span><br><span class="line">[root@centos-vip keepalived-<span class="number">1.1</span><span class="number">.17</span>]<span class="preprocessor">#</span></span><br></pre></td></tr></table></figure>
+<h2 id="2-4_keepalive-conf实现IP接管部分参数说明">2.4    keepalive.conf实现IP接管部分参数说明</h2><p><strong> 全局定义部分：主要设置keepalived的通讯机制和标识 </strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">[root@centos-vip ~]<span class="preprocessor"># cat /etc/keepalived/keepalived.conf </span></span><br><span class="line">! Configuration File <span class="keyword">for</span> keepalived</span><br><span class="line"></span><br><span class="line">global_defs &#123;</span><br><span class="line">notification_email &#123;    <span class="preprocessor">#这是email通知参数。作用：当LVS发生切换或RS等有故障时，会发邮件报警。这是可选配置，notification_email指定在keepalived发生事件时，需要发给的email地址，可以有多个，每行一个。</span></span><br><span class="line">acassen@firewall.loc</span><br><span class="line">failover@firewall.loc</span><br><span class="line">sysadmin@firewall.loc</span><br><span class="line">&#125;</span><br><span class="line">notification_email_from Alexandre.Cassen@firewall.loc</span><br><span class="line">smtp_server <span class="number">192.168</span><span class="number">.200</span><span class="number">.1</span>           <span class="preprocessor">#指定发送邮件的smtp服务器，如果本机开启了sendmail，就可以使用上面默认配置实现邮件发送。</span></span><br><span class="line">smtp_connect_timeout <span class="number">30</span></span><br><span class="line">router_id LVS_DEVEL        <span class="preprocessor">#指lvs负载均衡器标识(router_id)。在一个局域网内，它应该是唯一的。安装完成后一定要修改，保证局域网内的唯一性。</span></span><br><span class="line">&#125;           大括号用来分隔定义块，由于定义的块的内部存在嵌套关系，因此，要特别注意完整性。</span><br><span class="line"></span><br><span class="line">VRRP定义块：</span><br><span class="line">vrrp_instance VI_1 &#123;  <span class="preprocessor">#表示一个实例，每个vrrp实例可以认为是一个keepalived实例，在配置中vrrp实例可以有多个。</span></span><br><span class="line">state MASTER     实例状态，只有MASTER和BACKUP两种状态，并且需要大写。其中MASTER为工作状态，BACKUP为备用状态。当MASTER所在的服务器失效时，BACKUP所在的系统会自动把它的状态有BACKUP变成MASTER；当失效的MASTER所在的系统恢复时，BACKUP从MASTER恢复到BACKUP状态；</span><br><span class="line">interface eth0        <span class="preprocessor">#通信接口。对外提供服务的网络接口，如eth0,eth1。当前主流的服务器都有<span class="number">2</span>个或<span class="number">2</span>个以上的网络接口，在选择服务接口时，一定要搞清楚了。</span></span><br><span class="line">virtual_router_id <span class="number">51</span>    <span class="preprocessor">#虚拟路由标识virtual_router_id。这个标识是一个数字，并且同一个vrrp实例使用唯一的标识。即同一个vrrp_instance,MASTER和BACKUP的virtual_router_id是一致的，同时在整个keepalived内是唯一的。</span></span><br><span class="line">priority <span class="number">100</span>      <span class="preprocessor">#优先级，数字格式，数值愈大，优先级越高。在同一个vrrp_instance里，MASTER的优先级高于BACKUP。若MASTER的priority值为<span class="number">150</span>，那么BACKUP的priority只能是<span class="number">149</span>或更小的数值。</span></span><br><span class="line">advert_int <span class="number">1</span>       <span class="preprocessor">#同步通知间隔advert_int,MASTER和BACKUP负载均衡器之间同步检查的时间间隔，单位为秒。</span></span><br><span class="line">authentication &#123;         <span class="preprocessor">#验证authentication。包含验证类型和验证密码。类型主要有PASS、AH两种，通常使用的类型为PASS，据说AH使用时有问题。验证密码为明文，同一vrrp实例MASTER与BACKUP使用相同的密码才能正常通信，这里官方推荐用明文即可。</span></span><br><span class="line">auth_type PASS</span><br><span class="line">auth_pass <span class="number">1111</span></span><br><span class="line">&#125;</span><br><span class="line">virtual_ipaddress &#123;   <span class="preprocessor">#虚拟ip地址virtual_ipaddress 。可以配置多个IP，每个地址占一行，不需要指定子网掩码。注意：这个IP必须与我们在lvs客户端设置的vip地址（上文中的lo:<span class="number">0</span>）要一致。</span></span><br><span class="line"><span class="number">192.168</span><span class="number">.200</span><span class="number">.16</span></span><br><span class="line"><span class="number">192.168</span><span class="number">.200</span><span class="number">.17</span></span><br><span class="line"><span class="number">192.168</span><span class="number">.200</span><span class="number">.18</span></span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="2-5_配置keepalived-conf实现IP接管（配置双主）">2.5    配置keepalived.conf实现IP接管（配置双主）</h2><h3 id="2-5-1_单实例主备模式的keepalived配置文件对比">2.5.1    单实例主备模式的keepalived配置文件对比</h3><p>主keepalived    :<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">[root@centos-vip ~]<span class="preprocessor"># cat /etc/keepalived/keepalived.conf  -n</span></span><br><span class="line"><span class="number">1</span>  ! Configuration File <span class="keyword">for</span> keepalived</span><br><span class="line"><span class="number">2</span></span><br><span class="line"><span class="number">3</span>  global_defs &#123;</span><br><span class="line"><span class="number">4</span>     notification_email &#123;</span><br><span class="line"><span class="number">5</span>       acassen@firewall.loc</span><br><span class="line"><span class="number">6</span>       failover@firewall.loc</span><br><span class="line"><span class="number">7</span>       sysadmin@firewall.loc</span><br><span class="line"><span class="number">8</span>     &#125;</span><br><span class="line"><span class="number">9</span>     notification_email_from Alexandre.Cassen@firewall.loc</span><br><span class="line"><span class="number">10</span>     smtp_server <span class="number">192.168</span><span class="number">.200</span><span class="number">.1</span></span><br><span class="line"><span class="number">11</span>     smtp_connect_timeout <span class="number">30</span></span><br><span class="line"><span class="number">12</span>     router_id LVS_1</span><br><span class="line"><span class="number">13</span>  &#125;</span><br><span class="line"><span class="number">14</span></span><br><span class="line"><span class="number">15</span>  vrrp_instance VI_1 &#123;</span><br><span class="line"><span class="number">16</span>      state MASTER</span><br><span class="line"><span class="number">17</span>      interface eth0</span><br><span class="line"><span class="number">18</span>      virtual_router_id <span class="number">51</span></span><br><span class="line"><span class="number">19</span>      priority <span class="number">150</span></span><br><span class="line"><span class="number">20</span>      advert_int <span class="number">1</span></span><br><span class="line"><span class="number">21</span>      authentication &#123;</span><br><span class="line"><span class="number">22</span>          auth_type PASS</span><br><span class="line"><span class="number">23</span>          auth_pass <span class="number">1111</span></span><br><span class="line"><span class="number">24</span>      &#125;</span><br><span class="line"><span class="number">25</span>      virtual_ipaddress &#123;</span><br><span class="line"><span class="number">26</span>          <span class="number">192.168</span><span class="number">.200</span><span class="number">.16</span></span><br><span class="line"><span class="number">27</span>          <span class="number">192.168</span><span class="number">.200</span><span class="number">.17</span></span><br><span class="line"><span class="number">28</span>          <span class="number">192.168</span><span class="number">.200</span><span class="number">.18</span></span><br><span class="line"><span class="number">29</span>      &#125;</span><br><span class="line"><span class="number">30</span>  &#125;</span><br></pre></td></tr></table></figure></p>
+<p>备keepalived:<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">[root@centos-vip ~]<span class="preprocessor"># cat /etc/keepalived/keepalived.conf  -n</span></span><br><span class="line"><span class="number">1</span>  ! Configuration File <span class="keyword">for</span> keepalived</span><br><span class="line"><span class="number">2</span></span><br><span class="line"><span class="number">3</span>  global_defs &#123;</span><br><span class="line"><span class="number">4</span>     notification_email &#123;</span><br><span class="line"><span class="number">5</span>       acassen@firewall.loc</span><br><span class="line"><span class="number">6</span>       failover@firewall.loc</span><br><span class="line"><span class="number">7</span>       sysadmin@firewall.loc</span><br><span class="line"><span class="number">8</span>     &#125;</span><br><span class="line"><span class="number">9</span>     notification_email_from Alexandre.Cassen@firewall.loc</span><br><span class="line"><span class="number">10</span>     smtp_server <span class="number">192.168</span><span class="number">.200</span><span class="number">.1</span></span><br><span class="line"><span class="number">11</span>     smtp_connect_timeout <span class="number">30</span></span><br><span class="line"><span class="number">12</span>     router_id LVS_2</span><br><span class="line"><span class="number">13</span>  &#125;</span><br><span class="line"><span class="number">14</span></span><br><span class="line"><span class="number">15</span>  vrrp_instance VI_1 &#123;</span><br><span class="line"><span class="number">16</span>      state BACKUP</span><br><span class="line"><span class="number">17</span>      interface eth0</span><br><span class="line"><span class="number">18</span>      virtual_router_id <span class="number">51</span></span><br><span class="line"><span class="number">19</span>      priority <span class="number">100</span></span><br><span class="line"><span class="number">20</span>      advert_int <span class="number">1</span></span><br><span class="line"><span class="number">21</span>      authentication &#123;</span><br><span class="line"><span class="number">22</span>          auth_type PASS</span><br><span class="line"><span class="number">23</span>          auth_pass <span class="number">1111</span></span><br><span class="line"><span class="number">24</span>      &#125;</span><br><span class="line"><span class="number">25</span>      virtual_ipaddress &#123;</span><br><span class="line"><span class="number">26</span>          <span class="number">192.168</span><span class="number">.200</span><span class="number">.16</span></span><br><span class="line"><span class="number">27</span>          <span class="number">192.168</span><span class="number">.200</span><span class="number">.17</span></span><br><span class="line"><span class="number">28</span>          <span class="number">192.168</span><span class="number">.200</span><span class="number">.18</span></span><br><span class="line"><span class="number">29</span>      &#125;</span><br><span class="line"><span class="number">30</span>  &#125;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>注：主备其实就是优先级来定义的，也就是说就算你是MASTER，当你的优先级比BACKUP低时，那MASTER其实只能算备节点。</p>
+</blockquote>
+<h3 id="2-5-2_双多实例双主模式的配置文件对比">2.5.2    双多实例双主模式的配置文件对比</h3><p>双主模式应用场景如下：</p>
+<blockquote>
+<p>两台lvs+keepalived A  B两台，<br>A：负责www服务的负载；<br>B：负责BBS服务的负载；<br>在配置Keepalived时，在A、B两台机器上分别配置两个keepalived实例；<br>并互为主备，这样一台机器挂掉，另一台可接管。</p>
+</blockquote>
+<p><strong> 主keepalived </strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">[root@centos-vip ~]<span class="preprocessor"># cat /etc/keepalived/keepalived.conf  -n</span></span><br><span class="line"><span class="number">1</span>  ! Configuration File <span class="keyword">for</span> keepalived</span><br><span class="line"><span class="number">2</span></span><br><span class="line"><span class="number">3</span>  global_defs &#123;</span><br><span class="line"><span class="number">4</span>     notification_email &#123;</span><br><span class="line"><span class="number">5</span>       acassen@firewall.loc</span><br><span class="line"><span class="number">6</span>       failover@firewall.loc</span><br><span class="line"><span class="number">7</span>       sysadmin@firewall.loc</span><br><span class="line"><span class="number">8</span>     &#125;</span><br><span class="line"><span class="number">9</span> notification_email_from Alexandre.Cassen@firewall.loc</span><br><span class="line"><span class="number">10</span>     smtp_server <span class="number">192.168</span><span class="number">.1</span><span class="number">.1</span></span><br><span class="line"><span class="number">11</span>     smtp_connect_timeout <span class="number">30</span></span><br><span class="line"><span class="number">12</span>     router_id LVS_1</span><br><span class="line"><span class="number">13</span>  &#125;</span><br><span class="line"><span class="number">14</span></span><br><span class="line"><span class="number">15</span>  vrrp_instance VI_1 &#123;</span><br><span class="line"><span class="number">16</span>      state MASTER</span><br><span class="line"><span class="number">17</span>      interface eth0</span><br><span class="line"><span class="number">18</span>      virtual_router_id <span class="number">51</span></span><br><span class="line"><span class="number">19</span>      priority <span class="number">150</span></span><br><span class="line"><span class="number">20</span>      advert_int <span class="number">1</span></span><br><span class="line"><span class="number">21</span>      authentication &#123;</span><br><span class="line"><span class="number">22</span>          auth_type PASS</span><br><span class="line"><span class="number">23</span>          auth_pass <span class="number">1111</span></span><br><span class="line"><span class="number">24</span>      &#125;</span><br><span class="line"><span class="number">25</span>      virtual_ipaddress &#123;</span><br><span class="line"><span class="number">26</span>          <span class="number">192.168</span><span class="number">.1</span><span class="number">.116</span></span><br><span class="line"><span class="number">27</span>          <span class="number">192.168</span><span class="number">.1</span><span class="number">.126</span></span><br><span class="line"><span class="number">28</span>          <span class="number">192.168</span><span class="number">.1</span><span class="number">.136</span></span><br><span class="line"><span class="number">29</span>      &#125;</span><br><span class="line"><span class="number">30</span>  &#125;</span><br><span class="line"><span class="number">31</span>  vrrp_instance VI_2&#123;</span><br><span class="line"><span class="number">32</span>      state BACKUP</span><br><span class="line"><span class="number">33</span>      interface eth0</span><br><span class="line"><span class="number">34</span>      virtual_router_id <span class="number">52</span></span><br><span class="line"><span class="number">35</span>      priority <span class="number">50</span></span><br><span class="line"><span class="number">36</span>      advert_int <span class="number">1</span></span><br><span class="line"><span class="number">37</span>      authentication &#123;</span><br><span class="line"><span class="number">38</span>          auth_type PASS</span><br><span class="line"><span class="number">39</span>          auth_pass <span class="number">1111</span></span><br><span class="line"><span class="number">40</span>      &#125;</span><br><span class="line"><span class="number">41</span>      virtual_ipaddress &#123;</span><br><span class="line"><span class="number">42</span>          <span class="number">192.168</span><span class="number">.1</span><span class="number">.116</span></span><br><span class="line"><span class="number">43</span>          <span class="number">192.168</span><span class="number">.1</span><span class="number">.126</span></span><br><span class="line"><span class="number">44</span>          <span class="number">192.168</span><span class="number">.1</span><span class="number">.136</span></span><br><span class="line"><span class="number">45</span>      &#125;</span><br><span class="line"><span class="number">46</span>  &#125;</span><br></pre></td></tr></table></figure>
+<p><strong> 备keepalived </strong><br><figure class="highlight"><figcaption><span>~]# cat</span><a href="/etc/keepalived/keepalived.conf">-n</a></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1  ! Configuration File for keepalived&#10;2&#10;3  global_defs &#123;&#10;4     notification_email &#123;&#10;5       acassen@firewall.loc&#10;6       failover@firewall.loc&#10;7       sysadmin@firewall.loc&#10;8     &#125;&#10;9     notification_email_from Alexandre.Cassen@firewall.loc&#10;10     smtp_server 192.168.1.1&#10;11     smtp_connect_timeout 30&#10;12     router_id LVS_2&#10;13  &#125;&#10;14&#10;15  vrrp_instance VI_1 &#123;&#10;16      state BACKUP&#10;17      interface eth0&#10;18      virtual_router_id 51&#10;19      priority 100&#10;20      advert_int 1&#10;21      authentication &#123;&#10;22          auth_type PASS&#10;23          auth_pass 1111&#10;24      &#125;&#10;25      virtual_ipaddress &#123;&#10;26          192.168.1.116&#10;27          192.168.1.126&#10;28          192.168.1.136&#10;29      &#125;&#10;30  &#125;&#10;31  vrrp_instance VI_2&#123;&#10;32      state MASTER&#10;33      interface eth0&#10;34      virtual_router_id 52&#10;35      priority 150&#10;36      advert_int 1&#10;37      authentication &#123;&#10;38          auth_type PASS&#10;39          auth_pass 1111&#10;40      &#125;&#10;41      virtual_ipaddress &#123;&#10;42          192.168.1.116&#10;43          192.168.1.126&#10;44          192.168.1.136&#10;45      &#125;&#10;46  &#125;</span><br></pre></td></tr></table></figure></p>
+<p>这里要说明一下：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">global_defs &#123;</span><br><span class="line">router_id LVS_1           <span class="preprocessor">#注意：这个不是唯一是标识，主辅可以一样 </span></span><br><span class="line">&#125;</span><br><span class="line">vrrp_instance VI_1 &#123;</span><br><span class="line">state MASTER            <span class="preprocessor">#注意：这是唯一，辅助服务器改成： BACKUP</span></span><br><span class="line">priority <span class="number">150</span>              <span class="preprocessor">#注意：这是唯一，辅助服务器改成不同的数值：<span class="number">100</span></span></span><br><span class="line">interface eth0            <span class="preprocessor">#注意：指定vrrp的网卡</span></span><br><span class="line">virtual_router_id <span class="number">51</span>       <span class="preprocessor">#注意：这是唯一，主辅都一样</span></span><br><span class="line">authentication &#123;</span><br><span class="line">auth_type PASS</span><br><span class="line">auth_pass <span class="number">111</span>        <span class="preprocessor">#注意：这<span class="number">2</span>行是唯一，主辅都一样</span></span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">virtual_server <span class="number">192.168</span><span class="number">.1</span><span class="number">.116</span> <span class="number">80</span>&#123;</span><br><span class="line">delay_loop <span class="number">6</span>              <span class="preprocessor">#注意：每隔<span class="number">10</span>秒查询realserver状态</span></span><br><span class="line">lb_algo wrr               <span class="preprocessor">#注意：指定lvs的负载算法</span></span><br><span class="line">lb_kind DR                <span class="preprocessor">#注意：指定lvs的负载方式</span></span><br><span class="line">persistence_timeout <span class="number">120</span>   <span class="preprocessor">#注意：同一IP的连接<span class="number">60</span>秒内被分配到同一台realserver</span></span><br><span class="line">protocol TCP              <span class="preprocessor">#注意：用TCP协议检查realserver状态</span></span><br><span class="line">.............</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>然后启动两端的keepalived服务：</p>
+<blockquote>
+<p>主1-从2    </p>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">[root@centos-vip ~]<span class="preprocessor"># ip add</span></span><br><span class="line"><span class="number">1</span>: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu <span class="number">16436</span> qdisc noqueue </span><br><span class="line">link/loopback <span class="number">00</span>:<span class="number">00</span>:<span class="number">00</span>:<span class="number">00</span>:<span class="number">00</span>:<span class="number">00</span> brd <span class="number">00</span>:<span class="number">00</span>:<span class="number">00</span>:<span class="number">00</span>:<span class="number">00</span>:<span class="number">00</span></span><br><span class="line">inet <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>/<span class="number">8</span> scope host lo</span><br><span class="line">inet6 ::<span class="number">1</span>/<span class="number">128</span> scope host </span><br><span class="line">valid_lft forever preferred_lft forever</span><br><span class="line"><span class="number">2</span>: eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu <span class="number">1500</span> qdisc pfifo_fast qlen <span class="number">1000</span></span><br><span class="line">link/ether <span class="number">00</span>:<span class="number">0</span>c:<span class="number">29</span>:cf:a6:<span class="number">8</span>a brd ff:ff:ff:ff:ff:ff</span><br><span class="line">inet <span class="number">192.168</span><span class="number">.1</span><span class="number">.113</span>/<span class="number">24</span> brd <span class="number">192.168</span><span class="number">.1</span><span class="number">.255</span> scope global eth0</span><br><span class="line">inet <span class="number">192.168</span><span class="number">.1</span><span class="number">.116</span>/<span class="number">32</span> scope global eth0</span><br><span class="line">inet <span class="number">192.168</span><span class="number">.1</span><span class="number">.126</span>/<span class="number">32</span> scope global eth0</span><br><span class="line">inet6 fe80::<span class="number">20</span>c:<span class="number">29f</span>f:fecf:a68a/<span class="number">64</span> scope link </span><br><span class="line">valid_lft forever preferred_lft forever</span><br><span class="line"><span class="number">3</span>: sit0: &lt;NOARP&gt; mtu <span class="number">1480</span> qdisc noop </span><br><span class="line">link/sit <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span> brd <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span></span><br><span class="line">[root@centos-vip ~]<span class="preprocessor">#</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>从1-主2<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[root@VIP1 tmp]<span class="preprocessor"># ip add</span></span><br><span class="line"><span class="number">1</span>: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu <span class="number">16436</span> qdisc noqueue </span><br><span class="line">link/loopback <span class="number">00</span>:<span class="number">00</span>:<span class="number">00</span>:<span class="number">00</span>:<span class="number">00</span>:<span class="number">00</span> brd <span class="number">00</span>:<span class="number">00</span>:<span class="number">00</span>:<span class="number">00</span>:<span class="number">00</span>:<span class="number">00</span></span><br><span class="line">inet <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>/<span class="number">8</span> scope host lo</span><br><span class="line">inet6 ::<span class="number">1</span>/<span class="number">128</span> scope host </span><br><span class="line">valid_lft forever preferred_lft forever</span><br><span class="line"><span class="number">2</span>: eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu <span class="number">1500</span> qdisc pfifo_fast qlen <span class="number">1000</span></span><br><span class="line">link/ether <span class="number">00</span>:<span class="number">50</span>:<span class="number">56</span>:<span class="number">25</span>:<span class="number">6f</span>:<span class="number">2</span>c brd ff:ff:ff:ff:ff:ff</span><br><span class="line">inet <span class="number">192.168</span><span class="number">.1</span><span class="number">.112</span>/<span class="number">24</span> brd <span class="number">192.168</span><span class="number">.1</span><span class="number">.255</span> scope global eth0</span><br><span class="line">inet <span class="number">192.168</span><span class="number">.1</span><span class="number">.136</span>/<span class="number">32</span> scope global eth0</span><br><span class="line">inet6 fe80::<span class="number">250</span>:<span class="number">56f</span>f:fe25:<span class="number">6f</span>2c/<span class="number">64</span> scope link </span><br><span class="line">valid_lft forever preferred_lft forever</span><br><span class="line"><span class="number">3</span>: sit0: &lt;NOARP&gt; mtu <span class="number">1480</span> qdisc noop </span><br><span class="line">link/sit <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span> brd <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span></span><br><span class="line">[root@VIP1 tmp]<span class="preprocessor">#</span></span><br></pre></td></tr></table></figure></p>
+<p>注明：实际上测试的时候，发现一个问题，当主实例停掉后，从实例接管后，主实例再起来后，从实例没有释放，这从何解释？回答这个问题前，想下，这是个问题么，难道接管后再移交出去，自己的虚IP需要被释放么？</p>
+</blockquote>
+<ul>
+<li>通过以上的例子，我们还可以配置很多个实例，生产环境中配置的比较多的能达到十几个实例。 *</li>
+</ul>
+<p><strong> 如何查看keepalived的切换信息：</strong><br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[root@centos-vip ~]<span class="preprocessor"># tail /var/log/messages</span></span><br><span class="line">Oct  <span class="number">7</span> <span class="number">19</span>:<span class="number">38</span>:<span class="number">38</span> centos-vip Keepalived_vrrp: VRRP_Instance(VI_2) Transition to MASTER STATE</span><br><span class="line">Oct  <span class="number">7</span> <span class="number">19</span>:<span class="number">38</span>:<span class="number">39</span> centos-vip Keepalived_vrrp: VRRP_Instance(VI_2) Entering MASTER STATE</span><br><span class="line">Oct  <span class="number">7</span> <span class="number">19</span>:<span class="number">38</span>:<span class="number">39</span> centos-vip Keepalived_vrrp: VRRP_Instance(VI_2) setting protocol VIPs.</span><br><span class="line">Oct  <span class="number">7</span> <span class="number">19</span>:<span class="number">38</span>:<span class="number">39</span> centos-vip Keepalived_vrrp: VRRP_Instance(VI_2) Sending gratuitous ARPs on eth0 <span class="keyword">for</span> <span class="number">192.168</span><span class="number">.1</span><span class="number">.136</span></span><br><span class="line">Oct  <span class="number">7</span> <span class="number">19</span>:<span class="number">38</span>:<span class="number">39</span> centos-vip Keepalived_vrrp: Netlink reflector reports IP <span class="number">192.168</span><span class="number">.1</span><span class="number">.136</span> added</span><br><span class="line">Oct  <span class="number">7</span> <span class="number">19</span>:<span class="number">38</span>:<span class="number">39</span> centos-vip Keepalived_healthcheckers: Netlink reflector reports IP <span class="number">192.168</span><span class="number">.1</span><span class="number">.136</span> added</span><br><span class="line">Oct  <span class="number">7</span> <span class="number">19</span>:<span class="number">38</span>:<span class="number">39</span> centos-vip avahi-daemon[<span class="number">4549</span>]: Registering <span class="keyword">new</span> address record <span class="keyword">for</span> <span class="number">192.168</span><span class="number">.1</span><span class="number">.136</span> on eth0.</span><br><span class="line">Oct  <span class="number">7</span> <span class="number">19</span>:<span class="number">38</span>:<span class="number">41</span> centos-vip Keepalived_vrrp: VRRP_Instance(VI_1) Sending gratuitous ARPs on eth0 <span class="keyword">for</span> <span class="number">192.168</span><span class="number">.1</span><span class="number">.116</span></span><br><span class="line">Oct  <span class="number">7</span> <span class="number">19</span>:<span class="number">38</span>:<span class="number">41</span> centos-vip Keepalived_vrrp: VRRP_Instance(VI_1) Sending gratuitous ARPs on eth0 <span class="keyword">for</span> <span class="number">192.168</span><span class="number">.1</span><span class="number">.126</span></span><br><span class="line">Oct  <span class="number">7</span> <span class="number">19</span>:<span class="number">38</span>:<span class="number">44</span> centos-vip Keepalived_vrrp: VRRP_Instance(VI_2) Sending gratuitous ARPs on eth0 <span class="keyword">for</span> <span class="number">192.168</span><span class="number">.1</span><span class="number">.136</span></span><br><span class="line">[root@centos-vip ~]<span class="preprocessor">#</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="2-5-3_通过keepalived服务实现http服务的高可用实战演示">2.5.3    通过keepalived服务实现http服务的高可用实战演示</h3><p><strong> 步骤：</strong></p>
+<h4 id="1)_借用keepalived两台主机A、B上分别安装APACHE服务：">1)    借用keepalived两台主机A、B上分别安装APACHE服务：</h4><figure class="highlight autoit"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root<span class="constant">@VIP1</span> tmp]<span class="preprocessor"># yum install httpd -y</span></span><br></pre></td></tr></table></figure>
+<h4 id="2)_分别配置主页">2)    分别配置主页</h4><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">A</span>:</span><br><span class="line">[root<span class="variable">@centos-vip</span> ~]# echo vipmaster &gt; /var/www/html/index.html</span><br><span class="line"><span class="attribute">B</span>:</span><br><span class="line">[root<span class="variable">@centos-vip</span> ~]# echo vip1&gt; /var/www/html/index.html</span><br><span class="line"><span class="number">3</span>)	关闭防火墙（A、B）：</span><br><span class="line">[root<span class="variable">@VIP1</span> tmp]# /etc/init.d/iptables stop</span><br><span class="line">Flushing firewall <span class="attribute">rules</span>: [  OK  ]</span><br><span class="line">Setting chains to policy <span class="attribute">ACCEPT</span>: filter [  OK  ]</span><br><span class="line">Unloading iptables <span class="attribute">modules</span>: [  OK  ]</span><br><span class="line">[root<span class="variable">@VIP1</span> tmp]#</span><br></pre></td></tr></table></figure>
+<h4 id="4)_启动http服务（A、B）：">4)    启动http服务（A、B）：</h4><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">[root@centos-vip ~]</span># /etc/init.d/httpd start</span><br><span class="line">Starting httpd: <span class="string">[  OK  ]</span></span><br></pre></td></tr></table></figure>
+<h4 id="5)_启动keepalived服务（A、B）：">5)    启动keepalived服务（A、B）：</h4><figure class="highlight autoit"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root<span class="constant">@centos</span>-vip ~]<span class="preprocessor"># /etc/init.d/keepalived start</span></span><br><span class="line">Starting keepalived: [  OK  ]</span><br><span class="line">[root<span class="constant">@centos</span>-vip ~]<span class="preprocessor">#</span></span><br></pre></td></tr></table></figure>
+<h4 id="6)_测试VIP访问">6)    测试VIP访问</h4><p><img src="http://gitimg.qiniudn.com/diary_lvs_article2_001.png" alt="vipmaster"></p>
+<p>ok!主要是由于A为主，权重大，所以都是访问的A节点。</p>
+<h4 id="7)_停掉A节点的KEEPALIVED服务：">7)    停掉A节点的KEEPALIVED服务：</h4><p><img src="http://gitimg.qiniudn.com/diary_lvs_article2_002.png" alt="vip1"></p>
+<p>ok！切换成功！<br>那么我们再启动A节点：<br><img src="http://gitimg.qiniudn.com/diary_lvs_article2_003.png" alt="vipmaster"></p>
+<p>ok！又换回了A的位置了</p>
+<h4 id="8)_停掉B看看">8)    停掉B看看</h4><p><img src="http://gitimg.qiniudn.com/diary_lvs_article2_004.png" alt="vipmaster"></p>
+<p>ok!停掉B从服务，地球依然转动，无影响！！</p>
+<blockquote>
+<p>注意：通常情况下keepalived是解决主机之间的接管，而不是Http服务的接管，注意它的角色和位置。  以上的测试，也表明了该立场！！</p>
+</blockquote>
+<h3 id="2-5-4_配置Real_Server段">2.5.4    配置Real Server段</h3><p>即在上述的配置文件keepalived.con尾部添加如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">virtual_server <span class="number">192.168</span><span class="number">.1</span><span class="number">.116</span> <span class="number">80</span> &#123;</span><br><span class="line">delay_loop <span class="number">6</span>          	</span><br><span class="line">lb_algo wrr               <span class="preprocessor">#LVS的访问模式：轮询模式</span></span><br><span class="line">lb_kind DR                <span class="preprocessor">#LVS的模式</span></span><br><span class="line">nat_mask <span class="number">255.255</span><span class="number">.255</span><span class="number">.0</span></span><br><span class="line">persistence_timeout <span class="number">50</span>     <span class="preprocessor">#<span class="number">50</span>秒内客户端再次访问时，还会访问同一台RS</span></span><br><span class="line">protocol TCP                </span><br><span class="line"></span><br><span class="line">real_server <span class="number">192.168</span><span class="number">.1</span><span class="number">.117</span> <span class="number">80</span> &#123;</span><br><span class="line">weight <span class="number">1</span>              </span><br><span class="line">TCP_CHECK &#123;</span><br><span class="line">connect_timeout <span class="number">8</span>       </span><br><span class="line">nb_get_retry <span class="number">3</span></span><br><span class="line">delay_before_retry <span class="number">3</span></span><br><span class="line">connect_port <span class="number">80</span></span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">real_server <span class="number">192.168</span><span class="number">.1</span><span class="number">.112</span> <span class="number">80</span> &#123;</span><br><span class="line">weight <span class="number">1</span>              </span><br><span class="line">TCP_CHECK &#123;</span><br><span class="line">connect_timeout <span class="number">8</span>       </span><br><span class="line">nb_get_retry <span class="number">3</span></span><br><span class="line">delay_before_retry <span class="number">3</span></span><br><span class="line">connect_port <span class="number">80</span></span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="2-5-5_有关生产环境的配置说明">2.5.5    有关生产环境的配置说明</h3><p>1)    本位为生产环境的部署总结，但操作系统层面的优化等本文未涉及。另外一点，生产环境中，一般会部署双主同时服务互为主从的模式。这样可以满足高可用、高性能、高负载的需求；<br>2)    对于流量不是特别大的网站可以采用本例的单主模式；<br>3)    对于流量特别大的网站，除了采用双主的模式外，iptables防火墙的开放会影响网站性能。此时可以考虑关闭防火墙或者前端采用硬件防火墙。</p>
+<p>=====EOF=====</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015/11/18/hello-world/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          Hello World
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2013/12/20/lvs负载均衡环境搭建与总结/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">lvs负载均衡环境搭建与总结</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="lvs-keepalived环境搭建" data-title="lvs+keepalived环境搭建" data-url="http://yoursite.com/2013/12/26/lvs-keepalived环境搭建/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2015 John Doe
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>

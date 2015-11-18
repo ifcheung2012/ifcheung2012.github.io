@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>mysql存储引擎学习笔记 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="mysql存储引擎在网站架构应用中相当重要，如：mysql读写分类、主从设计等，那么mysql有哪些常用的引擎呢？这些存储引擎各有哪些特色？他们又通常应用在哪类场景下呢？如何应用呢？本文通过学习、交流、网摘、讨论最终形成了这份文档，用以备忘。
+
+但鉴于个人自己测试，很多地方没有覆盖到的，今后再补充吧
+
+关于官方介绍： 建议参考：mysql_5.1中文参考文档 （14-16章）
+MYSQL存储引擎概">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mysql存储引擎学习笔记">
+<meta property="og:url" content="http://yoursite.com/2013/10/22/mysql存储引擎学习笔记/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="mysql存储引擎在网站架构应用中相当重要，如：mysql读写分类、主从设计等，那么mysql有哪些常用的引擎呢？这些存储引擎各有哪些特色？他们又通常应用在哪类场景下呢？如何应用呢？本文通过学习、交流、网摘、讨论最终形成了这份文档，用以备忘。
+
+但鉴于个人自己测试，很多地方没有覆盖到的，今后再补充吧
+
+关于官方介绍： 建议参考：mysql_5.1中文参考文档 （14-16章）
+MYSQL存储引擎概">
+<meta property="og:updated_time" content="2014-11-22T07:54:39.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="mysql存储引擎学习笔记">
+<meta name="twitter:description" content="mysql存储引擎在网站架构应用中相当重要，如：mysql读写分类、主从设计等，那么mysql有哪些常用的引擎呢？这些存储引擎各有哪些特色？他们又通常应用在哪类场景下呢？如何应用呢？本文通过学习、交流、网摘、讨论最终形成了这份文档，用以备忘。
+
+但鉴于个人自己测试，很多地方没有覆盖到的，今后再补充吧
+
+关于官方介绍： 建议参考：mysql_5.1中文参考文档 （14-16章）
+MYSQL存储引擎概">
+  
+    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="null" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">John Doe</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="/#" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="/#" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="/#" title="rss">rss</a>
+					        
+								<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/EAS/" style="font-size: 10px;">EAS</a> <a href="/tags/ERP/" style="font-size: 15px;">ERP</a> <a href="/tags/INTERNET/" style="font-size: 10px;">INTERNET</a> <a href="/tags/KINGDEE/" style="font-size: 10px;">KINGDEE</a> <a href="/tags/LINUX/" style="font-size: 10px;">LINUX</a> <a href="/tags/MANAGEMENT/" style="font-size: 10px;">MANAGEMENT</a> <a href="/tags/PMP/" style="font-size: 10px;">PMP</a> <a href="/tags/TEAM/" style="font-size: 15px;">TEAM</a> <a href="/tags/archlinux/" style="font-size: 10px;">archlinux</a> <a href="/tags/centos/" style="font-size: 10px;">centos</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/linux/" style="font-size: 20px;">linux</a> <a href="/tags/linux-mysql-rsync-nfs-ssh/" style="font-size: 10px;">linux,mysql,rsync,nfs,ssh</a> <a href="/tags/lvs-keepalived-linux/" style="font-size: 10px;">lvs,keepalived,linux</a> <a href="/tags/lvs-linux-web/" style="font-size: 10px;">lvs,linux,web</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/mysql-binlog-recovery-shell/" style="font-size: 10px;">mysql,binlog,recovery,shell</a> <a href="/tags/mysql-engine/" style="font-size: 10px;">mysql,engine</a> <a href="/tags/mysql-trouble/" style="font-size: 10px;">mysql,trouble</a> <a href="/tags/python/" style="font-size: 15px;">python</a> <a href="/tags/router/" style="font-size: 10px;">router</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/team/" style="font-size: 10px;">team</a> <a href="/tags/运维/" style="font-size: 10px;">运维</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a> <a href="/tags/项目经理/" style="font-size: 10px;">项目经理</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">奥巴马的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">卡卡的美丽传说</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">本泽马的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">吉格斯的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">习大大大不同</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">托蒂的博客</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">我是谁，我从哪里来，我到哪里去？我就是我，是颜色不一样的吃货…</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">John Doe</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="null" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">John Doe</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="/#" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="/#" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/#" title="rss">rss</a>
+			        
+						<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-mysql存储引擎学习笔记" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2013/10/22/mysql存储引擎学习笔记/" class="article-date">
+  	<time datetime="2013-10-22T01:46:08.000Z" itemprop="datePublished">2013-10-22</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      mysql存储引擎学习笔记
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql-engine/">mysql,engine</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>mysql存储引擎在网站架构应用中相当重要，如：mysql读写分类、主从设计等，那么mysql有哪些常用的引擎呢？这些存储引擎各有哪些特色？他们又通常应用在哪类场景下呢？如何应用呢？<br>本文通过学习、交流、网摘、讨论最终形成了这份文档，用以备忘。</p>
+<blockquote>
+<p>但鉴于个人自己测试，很多地方没有覆盖到的，今后再补充吧</p>
+</blockquote>
+<p>关于官方介绍：<strong> 建议参考：mysql_5.1中文参考文档 （14-16章）</strong></p>
+<h2 id="MYSQL存储引擎概述">MYSQL存储引擎概述</h2><p>MySQL表存储结构是MySQL数据库的重要组成部分，下面就为您介绍3种主要MySQL表存储结构–MyISAM、InnoDB和NDBCluster。实际上MYSQL不仅可以同时使用多种存储引擎，而且每种存储引擎和MYSQL之间通过插件的方式使用。下面是MYSQL存储引擎体系结构简图：</p>
+<a id="more"></a>
+<h2 id="MyISAM引擎介绍">MyISAM引擎介绍</h2><h3 id="什么是MyISAM引擎？">什么是MyISAM引擎？</h3><p>MyISAM是MySQL关系数据库管理系统的默认储存引擎。这种MySQL表存储结构从旧的ISAM代码扩展出许多有用的功能。<br>这种引擎又可以分为静态MyISAM、动态MyISAM 和压缩MyISAM三种：<br>静态MyISAM：如果数据表中的各数据列的长度都是预先固定好的，服务器将自动选择这种表类型。因为数据表中每一条记录所占用的空间都是一样的，所以这种表存取和更新的效率非常高。当数据受损时，恢复工作也比较容易做。<br>动态MyISAM：如果数据表中出现varchar、xxxtext或xxxBLOB字段时，服务器将自动选择这种表类型。相对于静态MyISAM，这种表存储空间比较小，但由于每条记录的长度不一，所以多次修改数据后，数据表中的数据就可能离散的存储在内存中，进而导致执行效率下降。同时，内存中也可能会出现很多碎片。因此，这种类型的表要经常用optimize table 命令或优化工具来进行碎片整理。<br>压缩MyISAM：以上说到的两种类型的表都可以用myisamchk工具压缩。这种类型的表进一步减小了占用的存储，但是这种表压缩之后不能再被修改。另外，因为是压缩数据，所以这种表在读取的时候要先时行解压缩。<br>但是，不管是何种MyISAM表，目前它都不支持事务，行级锁和外键约束的功能。<br>在新版本的MySQL中，InnoDB引擎由于其对事务，参照完整性，以及更高的并发性等优点开始广泛的取代MyISAM。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&#62; show create table stu\G;&#10;*************************** 1. row ***************************&#10;Table: stu&#10;Create Table: CREATE TABLE `stu` (&#10;`age` char(5) DEFAULT NULL,&#10;`id` int(11) DEFAULT NULL,&#10;`name` char(100) DEFAULT NULL,&#10;`context` text,&#10;KEY `ind_name` (`age`,`name`(10))&#10;) ENGINE=MyISAM DEFAULT CHARSET=latin1  my.cnf&#37197;&#32622;&#25991;&#20214;&#40664;&#35748;&#20026;myisam&#24341;&#25806;&#10;1 row in set (0.00 sec)&#10;&#10;ERROR: &#10;No query specified&#10;&#10;mysql&#62;</span><br></pre></td></tr></table></figure>
+<p>每一个MyISAM表都对应于硬盘上的三个文件。这三个文件有一样的文件名，但是有不同的扩展名以指示其类型用途：.frm文件保存表的定义，但是这个文件并不是MyISAM引擎的一部，而是服务器的一部分；.MYD保存表的数据；.MYI是表的索引文件。<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@node2 3306]# ll data/phppin/&#10;total 24&#10;-rw-rw---- 1 mysql mysql   65 Aug 10 11:20 db.opt&#10;-rw-rw---- 1 mysql mysql   48 Aug 10 12:56 stu.MYD  &#26368;&#21518;&#19968;&#20010;&#23383;&#27597;Data &#25968;&#25454;&#25991;&#20214;&#10;-rw-rw---- 1 mysql mysql 2048 Aug 10 12:56 stu.MYI    &#26368;&#21518;&#19968;&#20010;&#23383;&#27597;Index&#32034;&#24341;&#25991;&#20214;&#10;-rw-rw---- 1 mysql mysql 8650 Aug 10 12:56 stu.frm&#10;[root@node2 3306]#</span><br></pre></td></tr></table></figure></p>
+<p>查看当前库支持的引擎：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&#62; show engines\G;&#10;*************************** 1. row ***************************&#10;Engine: MRG_MYISAM&#10;Support: YES&#10;Comment: Collection of identical MyISAM tables&#10;Transactions: NO&#10;XA: NO&#10;Savepoints: NO&#10;*************************** 2. row ***************************&#10;Engine: CSV&#10;Support: YES&#10;Comment: CSV storage engine&#10;Transactions: NO&#10;XA: NO&#10;Savepoints: NO&#10;*************************** 3. row ***************************&#10;Engine: MyISAM&#10;Support: DEFAULT&#10;Comment: Default engine as of MySQL 3.23 with great performance&#10;Transactions: NO&#10;XA: NO&#10;Savepoints: NO&#10;*************************** 4. row ***************************&#10;Engine: InnoDB&#10;Support: YES&#10;Comment: Supports transactions, row-level locking, and foreign keys&#10;Transactions: YES&#10;XA: YES&#10;Savepoints: YES&#10;*************************** 5. row ***************************&#10;Engine: MEMORY&#10;Support: YES&#10;Comment: Hash based, stored in memory, useful for temporary tables&#10;Transactions: NO&#10;XA: NO&#10;Savepoints: NO&#10;5 rows in set (0.00 sec)&#10;&#10;ERROR: &#10;No query specified&#10;&#10;mysql&#62;</span><br></pre></td></tr></table></figure></p>
+<h3 id="MYISAM引擎特点">MYISAM引擎特点</h3><p>•    不支持事务：MyISAM存储引擎不支持事务，所以对事务有要求的业务场景不能使用<br>•    表级锁定：其锁定机制是表级索引，这虽然可以让锁定的实现成本很小但是也同时大大降低了其并发性能<br>•    读写互相阻塞：不仅会在写入的时候阻塞读取，MyISAM还会在读取的时候阻塞写入，但读本身并不会阻塞另外的读<br>•    只会缓存索引：MyISAM可以通过key_buffer缓存以大大提高访问性能减少磁盘IO，但是这个缓存区只会缓存索引，而不会缓存数据<br>•    读取速度较快。占用资源相对少。<br>•    不支持外键约束，但支持全文索引。<br>•    MYISAM是MYSQL缺省的存储引擎</p>
+<h3 id="MYISAM引擎适用的业务场景">MYISAM引擎适用的业务场景</h3><p>•    不需要事务支持的业务(不支持)，一般读操作的网站应用都没有问题<br>•    并发相对较低的业务(锁定机制问题)<br>•    数据修改相对较少的业务(阻塞问题)<br>•    以读为主的业务，例如cms、blog、图片的数据库等业务。<br>•    对数据一致性要求不是非常高的业务</p>
+<h3 id="MYISAM引擎调优精要">MYISAM引擎调优精要</h3><p>•    尽量索引(缓存机制)<br>•    调整读写优先级，根据实际需求确保重要操作更优先<br>•    启用延迟插入改善大批量写入性能<br>•    尽量顺序操作让insert数据都写入到尾部，减少阻塞<br>•    分解大的操作，降低单个操作的阻塞时间<br>•    降低并发数，某些高并发场景通过应用来进行排队机制<br>•    对于相对静态的数据，充分利用mysql内部的Query Cache(my.cnf里配置)或者memcache外部缓存可以极大的提高访问效率<br>•    MyISAM的Count只有在全表扫描的时候特别高效，带有其他条件的count都需要进行实际的数据访问</p>
+<h2 id="InnoDB引擎介绍">InnoDB引擎介绍</h2><h3 id="什么是InnoDB引擎">什么是InnoDB引擎</h3><p>InnoDB是MySQL的另一个存储引擎，正成为目前MySQL AB所发行新版的标准，被包含在所有二进制安装包里。较之于其它的存储引擎它的优点是它支持兼容ACID的事务（类似于PostgreSQL),以及参数完整性（即对外键的支持）。</p>
+<p>另外，Oracle公司与2005年10月收购了Innobase。Innobase采用双认证授权。它使用GNU发行，也允许其它想将InnoDB结合到商业软件的团体获得授权。</p>
+<h3 id="InnoDB引擎特点">InnoDB引擎特点</h3><p>•    具有较好的事务支持：支持4个事务隔离级别，支持多版本读<br>•    行级锁定（更新时一般是锁定当前行）：通过索引实现，全表扫描仍然会是表锁，注意间隙锁的影响<br>•    读写阻塞与事务隔离级别相关<br>•    具有非常高效的缓存特性：能缓存索引，也能缓存数据<br>•    整个表和主键以Cluster方式存储，组成一颗平衡树<br>•    所有Secondary Index都会保存主键信息</p>
+<h3 id="InnoDB引擎适用的业务场景">InnoDB引擎适用的业务场景</h3><p>•    需要事务支持(具有较好的事务特性)<br>•    行级锁定对高并发有很好的适应能力，但需要确保查询是通过索引完成<br>•    数据更新较为频繁的场景<br>•    数据一致性要求较高<br>•    硬件设备内存较大，可以利用InnoDB较好的缓存能力来提高内存利用率，尽可能减少磁盘 IO</p>
+<h3 id="InnoDB引擎调优精要">InnoDB引擎调优精要</h3><p>•    主键尽可能小，避免给Secondary index带来过大的空间负担<br>•    避免全表扫描，因为会使用表锁<br>•    尽可能缓存所有的索引和数据，提高响应速度<br>•    在大批量小插入的时候，尽量自己控制事务而不要使用autocommit自动提交<br>•    合理设置innodb_flush_log_at_trx_commit参数值，不要过度追求安全性<br>•    避免主键更新，因为这会带来大量的数据移动</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@node2 3306]# grep -i innodb my.cnf&#10;# Uncomment the following if you are using InnoDB tables&#10;#innodb_data_home_dir = /usr/local/mysql/data&#10;#innodb_data_file_path = ibdata1:10M:autoextend&#10;#innodb_log_group_home_dir = /usr/local/mysql/data&#10;#innodb_buffer_pool_size = 16M  &#29983;&#20135;&#29615;&#22659;&#19979;&#65292;&#20004;&#20010;&#23454;&#20363;&#19979;&#65292;&#21487;&#33021;&#20250;&#32473;&#21040;2G&#65292;&#36825;&#23601;&#26159;&#32531;&#23384;&#25968;&#25454;&#21644;&#32034;&#24341;&#30340;&#20869;&#23384;&#22823;&#23567;&#10;#innodb_additional_mem_pool_size = 2M&#10;#innodb_log_file_size = 5M&#10;#innodb_log_buffer_size = 8M&#10;#innodb_flush_log_at_trx_commit = 1&#10;#nnodb_lock_wait_timeout = 50&#10;[root@node2 3306]#</span><br></pre></td></tr></table></figure>
+<h2 id="NDBCluster引擎介绍">NDBCluster引擎介绍</h2><h3 id="什么是NDBCluster引擎">什么是NDBCluster引擎</h3><p>2003年，MySQL AB公司从Sony Ericsson公司收购了NDB 存储引擎。NDB存储引擎是一个集群存储引擎，类似于Oracle的RAC集群，不过与Oracle RAC的 share everything结构不同的是，其结构是share nothing的集群架构，因此能提供更高级别的高可用性。NDB存储引擎的特点是数据全部放在内存中(从5.1版本开始，可以将非索引数据放在磁盘上)，因此主键查找(primary key lookups)的速度极快，并且能够在线添加NDB数据存储节点(data node)以便线性地提高数据库性能。由此可见，NDB存储引擎是高可用、高性能、高可扩展性的数据库集群系统，其面向的也是OLTP的数据库应用类型。</p>
+<h3 id="NDBCluster引擎特点">NDBCluster引擎特点</h3><p>•    分布式：分布式存储引擎，可以由多个NDBCluster存储引擎组成集群分别存放整体数据的一部分<br>•    支持事务：和Innodb一样，支持事务<br>•    可与mysqld不在一台主机：可以和mysqld分开存在于独立的主机上，然后通过网络和mysqld通信交互<br>•    内存需求量巨大：新版本索引以及被索引的数据必须存放在内存中，老版本所有数据和索引必须存在与内存中</p>
+<h3 id="NDBCluster引擎适用的业务场景">NDBCluster引擎适用的业务场景</h3><p>•    具有非常高的并发需求<br>•    对单个请求的响应并不是非常的critical<br>•    查询简单，过滤条件较为固定，每次请求数据量较少，又不希望自己进行水平Sharding</p>
+<h3 id="NDBCluster引擎调优精要">NDBCluster引擎调优精要</h3><p>•    尽可能让查询简单，避免数据的跨节点传输<br>•    尽可能满足SQL节点的计算性能，大一点的集群SQL节点会明显多余Data节点<br>•    在各节点之间尽可能使用万兆网络环境互联，以减少数据在网络层传输过程中的延时</p>
+<h2 id="有关MYSQL引擎的特别说明">有关MYSQL引擎的特别说明</h2><p>以上三个存储引擎是目前相对主流的存储引擎，还有其他类似如：Memory，Merge，CSV，Archive等存储引擎的使用场景都相对较少，这里就不一一分析了，如果有朋友感兴趣，后面再补充吧。</p>
+<h2 id="如何确定mysql服务器有哪些引擎可用？">如何确定mysql服务器有哪些引擎可用？</h2><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&#62; show engines\G;&#10;*************************** 1. row ***************************&#10;Engine: MyISAM&#10;Support: DEFAULT&#10;Comment: Default engine as of MySQL 3.23 with great performance&#10;Transactions: NO&#10;XA: NO&#10;Savepoints: NO&#10;*************************** 4. row ***************************&#10;Engine: InnoDB&#10;Support: YES&#10;Comment: Supports transactions, row-level locking, and foreign keys&#10;Transactions: YES&#10;XA: YES&#10;Savepoints: YES&#10;*************************** 5. row ***************************&#10;Engine: MEMORY&#10;Support: YES&#10;Comment: Hash based, stored in memory, useful for temporary tables&#10;Transactions: NO&#10;XA: NO&#10;Savepoints: NO&#10;5 rows in set (0.00 sec)&#10;mysql&#62;</span><br></pre></td></tr></table></figure>
+<h2 id="MYSQL引擎的my-cnf对应参数说明">MYSQL引擎的my.cnf对应参数说明</h2><p>略，不赘述了！</p>
+<h2 id="生产环境中如何批量更改MYSQL引擎">生产环境中如何批量更改MYSQL引擎</h2><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#/bin/bash&#10;#FileName:Convert_Storage_Engine.sh&#10;#Desc:Conversion of a MySQL tables to other storage engines&#10;#Create By:fedoracle&#10;#Date:2012/06/27&#10;&#10;DB=new&#10;USER=test&#10;PASSWD=test&#10;HOST=192.168.25.121&#10;MYSQL_BIN=/usr/local/mysql/bin&#10;S_ENGINE=MyISAM&#10;D_ENGINE=InnoDB&#10;&#10;#echo &#34;Enter MySQL bin path:&#34;&#10;#read MYSQL_BIN&#10;#echo &#34;Enter Host:&#34;&#10;#read HOST&#10;#echo &#34;Enter Uesr:&#34;&#10;#read USER&#10;#echo &#34;Enter Password:&#34;&#10;#read PASSWD&#10;#echo &#34;Enter DB name :&#34;&#10;#read DB&#10;#echo &#34;Enter the original engine:&#34;&#10;#read S_ENGINE&#10;#echo &#34;Enter the new engine:&#34;&#10;#read D_ENGINE&#10;&#10;$MYSQL_BIN/mysql -h$HOST -u$USER -p$PASSWD $DB -e &#34;select TABLE_NAME from information_schema.TABLES where TABLE_SCHEMA=&#39;&#34;$DB&#34;&#39; and ENGINE=&#39;&#34;$S_ENGINE&#34;&#39;;&#34; | grep -v &#34;TABLE_NAME&#34; &#62;tables.txt&#10;for t_name in `cat tables.txt`&#10;do&#10;echo &#34;Starting convert table $t_name......&#34;&#10;sleep 1&#10;$MYSQL_BIN/mysql -h$HOST -u$USER -p$PASSWD $DB -e &#34;alter table $t_name engine=&#39;&#34;$D_ENGINE&#34;&#39;&#34;   &#20851;&#38190;&#35821;&#21477;&#10;if [ $? -eq 0 ]&#10;then&#10;echo &#34;Convert table $t_name ended.&#34; &#62;&#62;con_table.log&#10;sleep 1&#10;else&#10;echo &#34;Convert failed!&#34; &#62;&#62; con_table.log&#10;fi&#10;done</span><br></pre></td></tr></table></figure>
+<p>另一种方法，使用sed对备份内容进行引擎转换</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nohup sed -e &#8216;s/MyISAM/InnoDB/g&#8217; zif.bak.sql&#62;zif.bak2.sql &#38;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>建表时的语句应加上指定引擎</p>
+<p>上好文：<a href="http://database.51cto.com/art/200902/107871.htm" target="_blank" rel="external">比较MYSQL的存储引擎</a><br><a href="http://www.sphinxsearch.org/archives/21" target="_blank" rel="external">网摘mysql优化</a></p>
+</blockquote>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2013/11/01/ssh-rsync-nfs-lamp测试笔记/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          ssh密钥分发_rsync同步_nfs_lamp服务搭建笔记
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2013/08/23/运维工作总结/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">运维工作总结</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="mysql存储引擎学习笔记" data-title="mysql存储引擎学习笔记" data-url="http://yoursite.com/2013/10/22/mysql存储引擎学习笔记/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2015 John Doe
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>

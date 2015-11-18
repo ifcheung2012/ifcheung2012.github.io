@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>mysql生产环境问题分析案例 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="生产数据丢失分享案例一故障分析与解决：1、网站服务器负载很高(&amp;gt;5)2、通过日志文件发现慢查询语句1[root@node2 3306]# grep slow my.cnf&amp;#10;log-slow-queries =/data/mysql/3306/slow.log
+可以对这个日志进行优化，将未建索引的满查询也置入该日志，然后自动化检测。3、找到目标，确定需要优化的语句，查看其条件列，exp">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mysql生产环境问题分析案例">
+<meta property="og:url" content="http://yoursite.com/2013/11/26/mysql生产环境问题分析案例/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="生产数据丢失分享案例一故障分析与解决：1、网站服务器负载很高(&amp;gt;5)2、通过日志文件发现慢查询语句1[root@node2 3306]# grep slow my.cnf&amp;#10;log-slow-queries =/data/mysql/3306/slow.log
+可以对这个日志进行优化，将未建索引的满查询也置入该日志，然后自动化检测。3、找到目标，确定需要优化的语句，查看其条件列，exp">
+<meta property="og:updated_time" content="2014-11-22T07:55:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="mysql生产环境问题分析案例">
+<meta name="twitter:description" content="生产数据丢失分享案例一故障分析与解决：1、网站服务器负载很高(&amp;gt;5)2、通过日志文件发现慢查询语句1[root@node2 3306]# grep slow my.cnf&amp;#10;log-slow-queries =/data/mysql/3306/slow.log
+可以对这个日志进行优化，将未建索引的满查询也置入该日志，然后自动化检测。3、找到目标，确定需要优化的语句，查看其条件列，exp">
+  
+    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="null" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">John Doe</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="/#" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="/#" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="/#" title="rss">rss</a>
+					        
+								<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/EAS/" style="font-size: 10px;">EAS</a> <a href="/tags/ERP/" style="font-size: 15px;">ERP</a> <a href="/tags/INTERNET/" style="font-size: 10px;">INTERNET</a> <a href="/tags/KINGDEE/" style="font-size: 10px;">KINGDEE</a> <a href="/tags/LINUX/" style="font-size: 10px;">LINUX</a> <a href="/tags/MANAGEMENT/" style="font-size: 10px;">MANAGEMENT</a> <a href="/tags/PMP/" style="font-size: 10px;">PMP</a> <a href="/tags/TEAM/" style="font-size: 15px;">TEAM</a> <a href="/tags/archlinux/" style="font-size: 10px;">archlinux</a> <a href="/tags/centos/" style="font-size: 10px;">centos</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/linux/" style="font-size: 20px;">linux</a> <a href="/tags/linux-mysql-rsync-nfs-ssh/" style="font-size: 10px;">linux,mysql,rsync,nfs,ssh</a> <a href="/tags/lvs-keepalived-linux/" style="font-size: 10px;">lvs,keepalived,linux</a> <a href="/tags/lvs-linux-web/" style="font-size: 10px;">lvs,linux,web</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/mysql-binlog-recovery-shell/" style="font-size: 10px;">mysql,binlog,recovery,shell</a> <a href="/tags/mysql-engine/" style="font-size: 10px;">mysql,engine</a> <a href="/tags/mysql-trouble/" style="font-size: 10px;">mysql,trouble</a> <a href="/tags/python/" style="font-size: 15px;">python</a> <a href="/tags/router/" style="font-size: 10px;">router</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/team/" style="font-size: 10px;">team</a> <a href="/tags/运维/" style="font-size: 10px;">运维</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a> <a href="/tags/项目经理/" style="font-size: 10px;">项目经理</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">奥巴马的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">卡卡的美丽传说</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">本泽马的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">吉格斯的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">习大大大不同</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">托蒂的博客</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">我是谁，我从哪里来，我到哪里去？我就是我，是颜色不一样的吃货…</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">John Doe</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="null" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">John Doe</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="/#" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="/#" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/#" title="rss">rss</a>
+			        
+						<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-mysql生产环境问题分析案例" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2013/11/26/mysql生产环境问题分析案例/" class="article-date">
+  	<time datetime="2013-11-26T08:41:49.000Z" itemprop="datePublished">2013-11-26</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      mysql生产环境问题分析案例
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql-trouble/">mysql,trouble</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="生产数据丢失分享案例一">生产数据丢失分享案例一</h2><h3 id="故障分析与解决：">故障分析与解决：</h3><p>1、网站服务器负载很高(&gt;5)<br>2、通过日志文件发现慢查询语句<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@node2 3306]# grep slow my.cnf&#10;log-slow-queries =/data/mysql/3306/slow.log</span><br></pre></td></tr></table></figure></p>
+<p>可以对这个日志进行优化，将未建索引的满查询也置入该日志，然后自动化检测。<br>3、找到目标，确定需要优化的语句，查看其条件列，explain下有无走索引<br>4、分析各条件列，count各列的唯一值，确定索引方案（大表的，常用的列）<br>5、咨询研发经理，创建联合索引，如果是大表，创建索引很耗时间，最好在业务流量低谷时创建索引<br>6、测试优化调整后的结果，即是否解决了问题并起到了效果？。</p>
+<h2 id="生产数据丢失分享案例二（一主两从）">生产数据丢失分享案例二（一主两从）</h2><a id="more"></a>
+<h3 id="故障分析与解决：-1">故障分析与解决：</h3><p>玩家装备丢失，需恢复数据查看原因，即需要恢复主库，但各种原因数据库无法恢复，如下：<br>问题1：M—&gt;S  #这个备份呢，但是不同步了。废了。<br>防范思路：从库备份，从库就要开binlog。备份包括全备加binlog增量备份。最好nagios监控主从同步（延迟）–可以看Oldboy博客上的nagios内容；</p>
+<p>问题2：—&gt;S  #这个同步也备份呢，但是，备份的目录没有内容？找备份脚本，备份生成目录没有了 mysqldump ….. &gt;/data/backup/bak.sql<br>防范思路：需要判断目录，如下脚本：<br>/data/backup,脚本没有判断创建备份目录也没判断，结果备份没留下来。<br>[ ! -d /data/backup ] &amp;&amp; mkdir -p /data/backup<br>并且：备份完毕要定时或随机时间检查啊，包括监控、邮件（产品发邮件给主管，玩家装备丢了）</p>
+<p>问题3：恢复数据库到3天前：<br>恢复数据需要BINLOG<br>我们那保留了2天的BINLOG。因此，利用binlog没法回了。<br>防范思路：我们的配置给大家的保留时间7天。<br>在哪个库上备份，就在哪个库上开启binlog。全备份的频率一般来说1天一次。<br>binlog的备份频率，如果单个主库最大实时同步binlog(inotify(sersync)+rsync),网友<br>通过切割binlog然后定时每分钟或者每5-60分钟推走一次（备份服务器）。</p>
+<p>总结：<br>1）全备+增量=完整的备份。<br>2）在哪个库上备份，就在哪个库上开启binlog。<br>3）全备+增量要及时的备份到备份服务器上。<br>4）MySQL同步也是备份（仅能防止物理宕机的恢复及热备，如果人为通过SQL删除数据库，同步无能为力了）。</p>
+<h2 id="延伸问题">延伸问题</h2><p>如何应对生产环境中的mysql数据库备份与恢复工作的？<br>lamp或者lnmp一体机情况下：<br>数据库备份方案：<br>a、开启binlog<br>b、定时任务每天进行mysqldump逻辑备份（100G备份文件）<br>c、实时或及时（每分钟）备份binlog增量<br>d、本地备份，全备备份完毕立刻推送到专用的备份服务器上。binlog增量直接，实时或及时（每分钟）的备份到备份服务器上。</p>
+<blockquote>
+<p>注意：<br>1、备份后要对备份后的文件检查（人工、脚本发邮件、定期还原模拟还原到测试库）<br>2、以上备份可以保证数据不丢失，但是，业务会受到严重影响。恢复的过程时间长（找服务器、装数据库、装好恢复）。<br>3、使用mysql主从同步来替代物理宕机的及时恢复。人工和定时备份主要是应对人为的操作失误。<br>4、加入数据库很大，如备份文件有100G，mysqldump逻辑的恢复时间4小时以上（可以其他的物理备份恢复方式）。那么我们可以对数据库进行分库分表备份。这样假如一个小表仅仅几十行十行记录，我们就可以有针对性的恢复这张表，而不需要对全库做恢复。<br>5、在数据库恢复之前，记得对要恢复的数据进行备份，防止二次破坏数据。</p>
+</blockquote>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2013/11/27/MYSQL使用与生产架构/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          MYSQL生产架构文章系列
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2013/11/22/mysql安全管理制度相关笔记/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">mysql安全管理制度相关笔记</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="mysql生产环境问题分析案例" data-title="mysql生产环境问题分析案例" data-url="http://yoursite.com/2013/11/26/mysql生产环境问题分析案例/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2015 John Doe
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>

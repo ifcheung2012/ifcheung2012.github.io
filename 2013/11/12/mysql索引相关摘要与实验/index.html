@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>mysql索引相关摘要与实验 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="1    索引的优化1.1 索引介绍什么是索引索引类似于书的目录，主要用于提高查询效率，也就是按条件查询的时候，先查询索引，再通过索引找到相关的数据，索引相当于记录了对某个关键词，指定到不同的文件，或者文件里的不同位置，当然索引自身也是通过文件来保存的。索引的原理？为什么索引会加快查询速度？
+索引的类型有两种基本的索引结构，也就是索引文件的保存方式，一个是顺序索引，就是根据值的顺序排序的（这个文件">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mysql索引相关摘要与实验">
+<meta property="og:url" content="http://yoursite.com/2013/11/12/mysql索引相关摘要与实验/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="1    索引的优化1.1 索引介绍什么是索引索引类似于书的目录，主要用于提高查询效率，也就是按条件查询的时候，先查询索引，再通过索引找到相关的数据，索引相当于记录了对某个关键词，指定到不同的文件，或者文件里的不同位置，当然索引自身也是通过文件来保存的。索引的原理？为什么索引会加快查询速度？
+索引的类型有两种基本的索引结构，也就是索引文件的保存方式，一个是顺序索引，就是根据值的顺序排序的（这个文件">
+<meta property="og:updated_time" content="2014-11-22T03:44:09.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="mysql索引相关摘要与实验">
+<meta name="twitter:description" content="1    索引的优化1.1 索引介绍什么是索引索引类似于书的目录，主要用于提高查询效率，也就是按条件查询的时候，先查询索引，再通过索引找到相关的数据，索引相当于记录了对某个关键词，指定到不同的文件，或者文件里的不同位置，当然索引自身也是通过文件来保存的。索引的原理？为什么索引会加快查询速度？
+索引的类型有两种基本的索引结构，也就是索引文件的保存方式，一个是顺序索引，就是根据值的顺序排序的（这个文件">
+  
+    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="null" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">John Doe</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="/#" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="/#" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="/#" title="rss">rss</a>
+					        
+								<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/EAS/" style="font-size: 10px;">EAS</a> <a href="/tags/ERP/" style="font-size: 15px;">ERP</a> <a href="/tags/INTERNET/" style="font-size: 10px;">INTERNET</a> <a href="/tags/KINGDEE/" style="font-size: 10px;">KINGDEE</a> <a href="/tags/LINUX/" style="font-size: 10px;">LINUX</a> <a href="/tags/MANAGEMENT/" style="font-size: 10px;">MANAGEMENT</a> <a href="/tags/PMP/" style="font-size: 10px;">PMP</a> <a href="/tags/TEAM/" style="font-size: 15px;">TEAM</a> <a href="/tags/archlinux/" style="font-size: 10px;">archlinux</a> <a href="/tags/centos/" style="font-size: 10px;">centos</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/linux/" style="font-size: 20px;">linux</a> <a href="/tags/linux-mysql-rsync-nfs-ssh/" style="font-size: 10px;">linux,mysql,rsync,nfs,ssh</a> <a href="/tags/lvs-keepalived-linux/" style="font-size: 10px;">lvs,keepalived,linux</a> <a href="/tags/lvs-linux-web/" style="font-size: 10px;">lvs,linux,web</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/mysql-binlog-recovery-shell/" style="font-size: 10px;">mysql,binlog,recovery,shell</a> <a href="/tags/mysql-engine/" style="font-size: 10px;">mysql,engine</a> <a href="/tags/mysql-trouble/" style="font-size: 10px;">mysql,trouble</a> <a href="/tags/python/" style="font-size: 15px;">python</a> <a href="/tags/router/" style="font-size: 10px;">router</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/team/" style="font-size: 10px;">team</a> <a href="/tags/运维/" style="font-size: 10px;">运维</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a> <a href="/tags/项目经理/" style="font-size: 10px;">项目经理</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">奥巴马的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">卡卡的美丽传说</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">本泽马的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">吉格斯的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">习大大大不同</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">托蒂的博客</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">我是谁，我从哪里来，我到哪里去？我就是我，是颜色不一样的吃货…</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">John Doe</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="null" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">John Doe</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="/#" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="/#" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/#" title="rss">rss</a>
+			        
+						<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-mysql索引相关摘要与实验" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2013/11/12/mysql索引相关摘要与实验/" class="article-date">
+  	<time datetime="2013-11-12T03:26:20.000Z" itemprop="datePublished">2013-11-12</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      mysql索引相关摘要与实验
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="1_索引的优化">1    索引的优化</h1><h2 id="1-1_索引介绍">1.1 索引介绍</h2><p>什么是索引<br>索引类似于书的目录，主要用于提高查询效率，也就是按条件查询的时候，先查询索引，再通过索引找到相关的数据，索引相当于记录了对某个关键词，指定到不同的文件，或者文件里的不同位置，当然索引自身也是通过文件来保存的。<br>索引的原理？为什么索引会加快查询速度？</p>
+<p>索引的类型<br>有两种基本的索引结构，也就是索引文件的保存方式，一个是顺序索引，就是根据值的顺序排序的（这个文件里面的值，也就是为其建索引的字段值，是顺序的放在索引文件里面），另外一个是散列索引，就是将值平均分配到若干散列桶中，通过散列函数定位的。</p>
+<h3 id="1-1-1_顺序索引">1.1.1    顺序索引</h3><p><strong> 顺序索引下面又有很多概念。 </strong></p>
+<p>1、如果被索引的字段本身按照一定的顺序排序，那么这种索引叫做聚集索引。否则叫做非聚集索引。<br>2、如果被索引的字段的每个值都有一个索引与其对应，那么这种索引叫做稠密索引，否则叫做稀疏索引。</p>
+<p>3、顺序索引分为两类，单级索引（不怎么用）和多级索引（通常是B+树，大量使用）。<br>a、单级索引就是把所有的索引字段以及对应的文件位置按顺序一个个的排列出来，这种索引查找起来比较慢，因为是顺序存储的，可以使用二分查找法，但是总体来说效率不高，这种索引是最基础的索引，一般不用，ORACLE里面好像不支持这种索引。<br>b、多级索引实际上就是在单级索引之上再加索引（稀疏索引），也就是指向索引的索引，二级索引上面还可以再加三级索引，可以不停的加，加到最后最上层只剩下一个节点（根节点），就成了一个树状结构了。</p>
+<a id="more"></a>
+<blockquote>
+<p>我们经常听到B+树就是这个概念，用这个树的目的和红黑树差不多，也是为了尽量保持树的平衡，当然红黑树是二叉树，但B+树就不是二叉树了，节点下面可以有多个子节点，数据库开发商会设置子节点数的一个最大值，这个值不会太小，所以B+树一般来说比较矮胖，而红黑树就比较瘦高了。<br>关于B+树的插入，删除，会涉及到一些算法以保持树的平衡，这里就不详述了。 <strong> ORACLE的默认索引就是这种结构的。</strong></p>
+<p>如果经常需要同时对两个字段进行AND查询,那么使用两个单独索引不如建立一个复合索引，因为两个单独索引通常数据库只能使用其中一个，而使用复合索引因为索引本身就对应到两个字段上的，效率会有很大提高。</p>
+</blockquote>
+<h3 id="1-1-2_散列索引">1.1.2    散列索引</h3><p>第二种索引叫做散列索引，就是通过散列函数来定位的一种索引，不过很少有单独使用散列索引的，反而是散列文件组织用的比较多。</p>
+<blockquote>
+<p>散列文件组织就是根据一个键通过散列计算把对应的记录都放到同一个槽中，这样的话相同的键值对应的记录就一定是放在同一个文件里了，也就减少了文件读取的次数，提高了效率。<br>散列索引呢就是根据对应键的散列码来找到最终的索引项的技术，其实和B树就差不多了，也就是一种索引之上的二级辅助索引，我理解散列索引都是二级或更高级的稀疏索引，否则桶就太多了，效率也不会很高。</p>
+</blockquote>
+<p><strong> 位图索引 </strong><br>位图索引是一种针对多个字段的简单查询设计一种特殊的索引，适用范围比较小，只适用于字段值固定并且值的种类很少的情况，比如性别，只能有男和女，或者级别，状态等等，并且只有在同时对多个这样的字段查询时才能体现出位图的优势。</p>
+<blockquote>
+<p>位图的基本思想就是对每一个条件都用0或者1来表示，如有5条记录，性别分别是男，女，男，男，女，那么如果使用位图索引就会建立两个位图，对应男的10110和对应女的01001,这样做有什么好处呢，就是如果同时对多个这种类型的字段进行and或or查询时，可以使用按位与和按位或来直接得到结果了。</p>
+</blockquote>
+<h3 id="1-1-3_小结">1.1.3    小结</h3><p>B+树最常用，性能也不差，用于范围查询和单值查询都可以。特别是范围查询，非得用B+树这种顺序的才可以了。<br>HASH的如果只是对单值查询的话速度会比B+树快一点，但是ORACLE好像不支持HASH索引，只支持HASH表空间。<br>位图的使用情况很局限，只有很少的情况才能用，一定要确定真正适合使用这种索引才用（值的类型很少并且需要复合查询），否则建立一大堆位图就一点意义都没有了。</p>
+<h3 id="1-1-4_索引的设计原则？">1.1.4    索引的设计原则？</h3><p>为了使索引的使用效率更高，在创建索引时，必须考虑在哪些字段上创建索引和创建什么类型的索引。本小节将介绍一些索引的设计原则。</p>
+<p>1．选择唯一性索引<br>唯一性索引的值是唯一的，可以更快速的通过该索引来确定某条记录。例如，学生表中学号是具有唯一性的字段。为该字段建立唯一性索引可以很快的确定某个学生的信息。如果使用姓名的话，可能存在同名现象，从而降低查询速度。</p>
+<p>2．为经常需要排序、分组和联合操作的字段建立索引<br>经常需要ORDER BY、GROUP BY、DISTINCT和UNION等操作的字段，排序操作会浪费很多时间。如果为其建立索引，可以有效地避免排序操作。</p>
+<p>3．为常作为查询条件的字段建立索引<br>如果某个字段经常用来做查询条件，那么该字段的查询速度会影响整个表的查询速度。因此，为这样的字段建立索引，可以提高整个表的查询速度。如where语句后面的条件列；</p>
+<p>4．限制索引的数目<br>索引的数目不是越多越好。每个索引都需要占用磁盘空间，索引越多，需要的磁盘空间就越大。修改表时，对索引的重构和更新很麻烦。越多的索引，会使更新表变得很浪费时间。（short keys are better,Integer best）</p>
+<p>5．尽量使用数据量少的索引<br>如果索引的值很长，那么查询的速度会受到影响。例如，对一个CHAR（100）类型的字段进行全文检索需要的时间肯定要比对CHAR（10）类型的字段需要的时间要多。</p>
+<p>6．尽量使用前缀来索引<br>如果索引字段的值很长，最好使用值的前缀来索引。例如，TEXT和BLOG类型的字段，进行全文检索会很浪费时间。如果只检索字段的前面的若干个字符，这样可以提高检索速度。</p>
+<p>7．删除不再使用或者很少使用的索引<br>　　表中的数据被大量更新，或者数据的使用方式被改变后，原有的一些索引可能不再需要。数据库管理员应当定期找出这些索引，将它们删除，从而减少索引对更新操作的影响。</p>
+<ol>
+<li><p>尽量不对基数小的列做索引<br>如性别列，通常就是“男/女”，对于这样的列做索引，索引需要更新维护，影响开销。</p>
+</li>
+<li><p>复合索引前缀特性，索引的顺序很重要。<br>key(a,b)…. where b=5 will not use index<br>创建复合索引时应将最常用作限制条件列放在最左边，依次递减。–这个在生产环境中就需要考察每个字段的在各个业务节点的使用频率，然后依次递减。通常建立索引需要在生产环境使用率较小的时点操作，数据量大的 ，可能耗时几分钟。<br>key(a,b,c)联合索引：<br>可以走索引的组合：key(a),key(a,b),key(a,b,c)<br>无法走索引的组合：key(b),key(b,c),key(a,c)</p>
+</li>
+<li><p>INNODB:尽量指定主键，最常用较短数据类型唯一列做主键</p>
+</li>
+<li><p>见谅使用定长字符型char,而不使用varchar</p>
+</li>
+<li><p>避免过度使用索引<br>索引的建立对提高检索能力很有用，但是数据库维护它很费资源。索引会占用磁盘空间，降低写操作。执行计划要考虑各个索引。索引不是越多越好。<br>　　注意：选择索引的最终目的是为了使查询的速度变快。上面给出的原则是最基本的准则，但不能拘泥于上面的准则。读者要在以后的学习和工作中进行不断的实践。根据应用的实际情况进行分析和判断，选择最合适的索引方式。</p>
+</li>
+</ol>
+<h3 id="1-1-5_创建索引语法">1.1.5    创建索引语法</h3><p><strong> 1、普通索引 </strong></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&#62; help create index;&#10;Name: &#39;CREATE INDEX&#39;&#10;Description:&#10;Syntax:&#10;CREATE [ONLINE|OFFLINE] [UNIQUE|FULLTEXT|SPATIAL] INDEX index_name&#10;[index_type]&#10;ON tbl_name (index_col_name,...)&#10;[index_option] ...&#10;index_col_name:&#10;col_name [(length)] [ASC | DESC]&#10;index_type:&#10;USING &#123;BTREE | HASH&#125;&#10;index_option:&#10;KEY_BLOCK_SIZE [=] value&#10;| index_type&#10;| WITH PARSER parser_name&#10;CREATE INDEX is mapped to an ALTER TABLE statement to create indexes.&#10;See [HELP ALTER TABLE]. CREATE INDEX cannot be used to create a PRIMARY&#10;KEY; use ALTER TABLE instead. For more information about indexes, see&#10;http://dev.mysql.com/doc/refman/5.1/en/mysql-indexes.html.&#10;&#10;URL: http://dev.mysql.com/doc/refman/5.1/en/create-index.html&#10;mysql&#62;</span><br></pre></td></tr></table></figure>
+<p>建表stu，仅一列id，并插入2行数据，建索引步骤如下：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&#62; desc stu;&#10;+-------+---------+------+-----+---------+-------+&#10;| Field | Type    | Null | Key | Default | Extra |&#10;+-------+---------+------+-----+---------+-------+&#10;| id    | int(11) | YES  |     | NULL    |       |&#10;+-------+---------+------+-----+---------+-------+&#10;1 row in set (0.00 sec)&#10;&#10;mysql&#62; select * from stu;&#10;+------+&#10;| id   |&#10;+------+&#10;|    1 |&#10;|    2 |&#10;+------+&#10;2 rows in set (0.00 sec)&#10;&#10;mysql&#62; create index ind_id on stu(id);&#10;Query OK, 2 rows affected (0.01 sec)        &#31995;&#32479;&#32473;&#27599;&#34892;&#25968;&#25454;&#25490;&#24207;&#24182;&#20570;&#25351;&#38024;&#12290;&#10;Records: 2  Duplicates: 0  Warnings: 0      &#10;mysql&#62; desc stu;&#10;+-------+---------+------+-----+---------+-------+&#10;| Field | Type    | Null | Key | Default | Extra |&#10;+-------+---------+------+-----+---------+-------+&#10;| id    | int(11) | YES  | MUL | NULL    |       |&#10;+-------+---------+------+-----+---------+-------+&#10;1 row in set (0.00 sec)&#10;&#10;mysql&#62;</span><br></pre></td></tr></table></figure></p>
+<p>查看主键：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&#62; show index from stu\G;&#10;*************************** 1. row ***************************&#10;Table: stu&#10;Non_unique: 1&#10;Key_name: ind_id&#10;Seq_in_index: 1&#10;Column_name: id&#10;Collation: A&#10;Cardinality: NULL&#10;Sub_part: NULL&#10;Packed: NULL&#10;Null: YES&#10;Index_type: BTREE             btree&#31867;&#22411;&#30340;&#32034;&#24341;&#10;Comment: &#10;1 row in set (0.00 sec)&#10;&#10;ERROR: &#10;No query specified&#10;&#10;mysql&#62;</span><br></pre></td></tr></table></figure></p>
+<p>查看建表语句（关注主键）：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&#62; show create table stu;&#10;+-------+----------------------------------------------------------------------------------------------------------------+&#10;| Table | Create Table                                                                                                   |&#10;+-------+----------------------------------------------------------------------------------------------------------------+&#10;| stu   | CREATE TABLE `stu` (&#10;`id` int(11) DEFAULT NULL,&#10;KEY `ind_id` (`id`)&#10;) ENGINE=MyISAM DEFAULT CHARSET=latin1 |&#10;+-------+----------------------------------------------------------------------------------------------------------------+&#10;1 row in set (0.00 sec)&#10;&#10;mysql&#62;</span><br></pre></td></tr></table></figure></p>
+<p>删除索引：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&#62; drop index ind_id on stu;&#10;Query OK, 2 rows affected (0.00 sec)&#10;Records: 2  Duplicates: 0  Warnings: 0</span><br></pre></td></tr></table></figure></p>
+<p><strong> 2、复合索引测试： </strong><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&#62; alter table stu add name char(100) after id;  &#28155;&#21152;&#26032;&#21015;&#21040;&#26576;&#21015;&#21518;&#10;Query OK, 2 rows affected (0.01 sec)&#10;Records: 2  Duplicates: 0  Warnings: 0&#10;&#10;mysql&#62; alter table stu add age char(5) first; &#28155;&#21152;&#26032;&#21015;&#33267;&#21015;&#39318;&#10;Query OK, 2 rows affected (0.01 sec)&#10;Records: 2  Duplicates: 0  Warnings: 0&#10;&#25554;&#20837;&#25968;&#25454;&#21518;&#65306;&#10;mysql&#62; update stu set name=&#39;wangrihua&#39;,age=55 where id=1;&#10;Query OK, 1 row affected (0.01 sec)&#10;Rows matched: 1  Changed: 1  Warnings: 0&#10;&#10;mysql&#62; update stu set name=&#39;lizongsheng&#39;,age=35 where id=2;&#10;Query OK, 1 row affected (0.00 sec)&#10;Rows matched: 1  Changed: 1  Warnings: 0&#10;&#10;mysql&#62; select * from stu;&#10;+------+------+-------------+&#10;| age  | id   | name        |&#10;+------+------+-------------+&#10;| 55   |    1 | wangrihua   |&#10;| 35   |    2 | lizongsheng |&#10;+------+------+-------------+&#10;2 rows in set (0.00 sec)</span><br></pre></td></tr></table></figure></p>
+<p>错误示例：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&#62; alter table stu add sex char(2) before name;  &#27809;&#26377;&#22312;&#26576;&#21015;&#21069;&#28155;&#21152;&#30340;&#35821;&#27861;&#10;ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near &#39;before name&#39; at line 1&#10;mysql&#62;</span><br></pre></td></tr></table></figure></p>
+<p>创建复合索引：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&#62; create index ind_name on stu(age,name(10)); &#27880;&#24847;&#36825;&#37324;&#20165;&#21462;name&#30340;&#21069;10&#20010;&#23383;&#27573;&#36827;&#34892;&#32034;&#24341;&#10;Query OK, 2 rows affected (0.01 sec)&#10;Records: 2  Duplicates: 0  Warnings: 0&#10;&#10;mysql&#62; show create table stu\G;&#10;*************************** 1. row ***************************&#10;Table: stu&#10;Create Table: CREATE TABLE `stu` (&#10;`age` char(5) DEFAULT NULL,&#10;`id` int(11) DEFAULT NULL,&#10;`name` char(100) DEFAULT NULL,&#10;KEY `ind_name` (`age`,`name`(10))          &#22797;&#21512;&#32034;&#24341;&#10;) ENGINE=MyISAM DEFAULT CHARSET=latin1&#10;1 row in set (0.00 sec)&#10;&#10;ERROR: &#10;No query specified&#10;&#10;mysql&#62;</span><br></pre></td></tr></table></figure></p>
+<p>判断某表是否存在索引的方法：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&#62; show index from stu\G;&#10;*************************** 1. row ***************************&#10;Table: stu&#10;Non_unique: 1&#10;Key_name: ind_name&#10;Seq_in_index: 1&#10;Column_name: age&#10;Collation: A&#10;Cardinality: NULL&#10;Sub_part: NULL&#10;Packed: NULL&#10;Null: YES&#10;Index_type: BTREE&#10;Comment: &#10;*************************** 2. row ***************************&#10;Table: stu&#10;Non_unique: 1&#10;Key_name: ind_name&#10;Seq_in_index: 2&#10;Column_name: name&#10;Collation: A&#10;Cardinality: NULL&#10;Sub_part: 10&#10;Packed: NULL&#10;Null: YES&#10;Index_type: BTREE&#10;Comment: &#10;2 rows in set (0.00 sec)&#10;&#10;ERROR: &#10;No query specified&#10;&#10;mysql&#62; explain select * from stu\G;&#10;*************************** 1. row ***************************&#10;id: 1&#10;select_type: SIMPLE           select&#31867;&#22411;&#65307;&#10;table: stu&#10;type: ALL              &#20197;&#19979;&#23601;&#19981;&#22826;&#25026;&#20102;&#65292;&#36825;&#20004;&#20010;&#26597;&#35810;&#35821;&#21477;&#65292;&#20986;&#26469;&#30340;&#32467;&#26524;&#19968;&#20010;&#21547;&#32034;&#24341;&#65292;&#19968;&#20010;&#27809;&#26377;&#32034;&#24341;&#65311;&#10;possible_keys: NULL&#10;key: NULL &#10;key_len: NULL&#10;ref: NULL&#10;rows: 2&#10;Extra: &#10;1 row in set (0.00 sec)&#10;&#10;ERROR: &#10;No query specified</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>以上问题 ，还需要查看mysql手册第7章解决！</p>
+<p>如果日常维护中，有语句发生堵塞，可通过下列查询：</p>
+</blockquote>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&#62; show full processlist\G;&#10;*************************** 1. row ***************************&#10;Id: 11&#10;User: root&#10;Host: localhost&#10;db: phppin&#10;Command: Query&#10;Time: 0&#10;State: NULL&#10;Info: show full processlist&#10;*************************** 2. row ***************************&#10;Id: 16&#10;User: system user&#10;Host: &#10;db: NULL&#10;Command: Connect&#10;Time: 5376&#10;State: Waiting for master to send event&#10;Info: NULL&#10;*************************** 3. row ***************************&#10;Id: 17&#10;User: system user&#10;Host: &#10;db: NULL&#10;Command: Connect&#10;Time: 258&#10;State: Has read all relay log; waiting for the slave I/O thread to update it&#10;Info: NULL&#10;3 rows in set (0.00 sec)&#10;&#10;ERROR: &#10;No query specified&#10;&#10;mysql&#62;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>如果数据库存在缓存，那么可以通过下列语句不经过数据库缓存查询：</p>
+</blockquote>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&#62; explain select SQL_NO_CACHE * from stu\G;&#10;*************************** 1. row ***************************&#10;id: 1&#10;select_type: SIMPLE&#10;table: stu&#10;type: ALL&#10;possible_keys: NULL&#10;key: NULL&#10;key_len: NULL&#10;ref: NULL&#10;rows: 2&#10;Extra: &#10;1 row in set (0.00 sec)&#10;&#10;ERROR: &#10;No query specified&#10;&#10;mysql&#62;</span><br></pre></td></tr></table></figure>
+<p>查询某表的唯一值总数（对比是否需要或者值得索引）：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&#62; select count(distinct name) from stu;  &#22914;&#26524;&#21807;&#19968;&#20540;&#36234;&#22810;&#65292;&#37027;&#20040;&#36234;&#20540;&#24471;&#32034;&#24341;&#65292;&#23454;&#38469;&#19978;&#21807;&#19968;&#20540;&#23545;&#27604;&#25152;&#26377;&#25968;&#25454;&#21512;&#35745;&#30340;&#24046;&#20540;&#36234;&#23567;&#65292;&#36234;&#35201;&#32034;&#24341;&#65307;&#10;+----------------------+&#10;| count(distinct name) |&#10;+----------------------+&#10;|                    2 |&#10;+----------------------+&#10;1 row in set (0.00 sec)&#10;&#10;mysql&#62;</span><br></pre></td></tr></table></figure></p>
+<h3 id="1-1-6_mysql数据库使用索引的条件：">1.1.6    mysql数据库使用索引的条件：</h3><ol>
+<li><p>mysql（btree）使用索引的比较条件：<br>&lt;,&lt;=,=,&gt;,&gt;=,between,in,!=或者&lt;&gt;,或者like ‘xxx%’</p>
+</li>
+<li><p>复合索引中只要有一列含有NULL值,那么这一列将不会使用索引。在数据库设计时不要让字段的默认值为NULL。</p>
+</li>
+<li><p>列类型是字符串，要在where条件中把字符串值用引号括起来。</p>
+</li>
+<li><p>用or分隔开的条件，or前条件有索引，而后面列无索引，那么涉及的索引都不会被用到。<br>条件不是索引列的第一部分。key(a,b) … where b=6 will not use inde.</p>
+</li>
+<li><p>like 语句操作<br>一般情况下尽量不使用like操作。如Like’%aaa%’，将不会使用索引，而like ‘aaa%’可以使用索引，可以建立fulltext或者sphinx(斯芬克司)</p>
+</li>
+<li><p>不要在列上进行运算<br>select <em> from user where year(adddate)&lt;2007；将在每行上进行运算，这将导致索引失效而进行全表扫描，因此我们可以改成select </em> from users where adddate &lt;’2007-01-01’;</p>
+</li>
+<li><p>不使用NOTIN 和 &lt;&gt;操作<br>NOT IN 和&lt;&gt;操作都不会使用索引将进行全表扫描。NOT IN 可以用NOT EXISTS代替，id&lt;&gt;3则可以使用id&gt;3 or id&lt;3来代替<br>其他：尽量用连接查询代替子查询（嵌套查询）</p>
+</li>
+<li><p>order by 的索引问题<br>mysql查询只使用一个索引，因此如果where子句中已经使用了索引，order by 中的列就不会再使用索引。因此数据库默认排序可以符合要求的情况下不要使用排序操作；尽量不要包含多个列的排序，如果需要，最好给这些列创建复合索引。<br>where 条件和Order by使用相同的索引，并且orderby的顺序和索引的顺序相同，并且order by字段都是升序或者降序的情况下，才会使用索引。</p>
+</li>
+</ol>
+<p>====本文结束了哦====</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2013/11/14/RT-N16路由定时任务/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          RT-N16路由定时任务
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2013/11/12/慧律禅师精粹/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">慧律禅师精粹</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="mysql索引相关摘要与实验" data-title="mysql索引相关摘要与实验" data-url="http://yoursite.com/2013/11/12/mysql索引相关摘要与实验/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2015 John Doe
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>

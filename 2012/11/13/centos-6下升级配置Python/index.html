@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>centos 6下升级配置Python | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Centos 6系统默认的python版本为2.4.3，鉴于平时接触的最多是2.7.3，该版本下的第三方模块多，稳定且问题较少，大家用的也很普遍，且据说该版是3.0版的基石，所以准备升级python至该版，安装过程中，需要注意一个问题：centos 6下的系统包管理工具Yum是运行在python 2.4.3下的，所以安装完python新版后，需要配置下yum执行脚本的python版本。详细安装和配">
+<meta property="og:type" content="article">
+<meta property="og:title" content="centos 6下升级配置Python">
+<meta property="og:url" content="http://yoursite.com/2012/11/13/centos-6下升级配置Python/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Centos 6系统默认的python版本为2.4.3，鉴于平时接触的最多是2.7.3，该版本下的第三方模块多，稳定且问题较少，大家用的也很普遍，且据说该版是3.0版的基石，所以准备升级python至该版，安装过程中，需要注意一个问题：centos 6下的系统包管理工具Yum是运行在python 2.4.3下的，所以安装完python新版后，需要配置下yum执行脚本的python版本。详细安装和配">
+<meta property="og:updated_time" content="2013-11-30T00:24:57.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="centos 6下升级配置Python">
+<meta name="twitter:description" content="Centos 6系统默认的python版本为2.4.3，鉴于平时接触的最多是2.7.3，该版本下的第三方模块多，稳定且问题较少，大家用的也很普遍，且据说该版是3.0版的基石，所以准备升级python至该版，安装过程中，需要注意一个问题：centos 6下的系统包管理工具Yum是运行在python 2.4.3下的，所以安装完python新版后，需要配置下yum执行脚本的python版本。详细安装和配">
+  
+    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="null" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">John Doe</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="/#" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="/#" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="/#" title="rss">rss</a>
+					        
+								<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/EAS/" style="font-size: 10px;">EAS</a> <a href="/tags/ERP/" style="font-size: 15px;">ERP</a> <a href="/tags/INTERNET/" style="font-size: 10px;">INTERNET</a> <a href="/tags/KINGDEE/" style="font-size: 10px;">KINGDEE</a> <a href="/tags/LINUX/" style="font-size: 10px;">LINUX</a> <a href="/tags/MANAGEMENT/" style="font-size: 10px;">MANAGEMENT</a> <a href="/tags/PMP/" style="font-size: 10px;">PMP</a> <a href="/tags/TEAM/" style="font-size: 15px;">TEAM</a> <a href="/tags/archlinux/" style="font-size: 10px;">archlinux</a> <a href="/tags/centos/" style="font-size: 10px;">centos</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/linux/" style="font-size: 20px;">linux</a> <a href="/tags/linux-mysql-rsync-nfs-ssh/" style="font-size: 10px;">linux,mysql,rsync,nfs,ssh</a> <a href="/tags/lvs-keepalived-linux/" style="font-size: 10px;">lvs,keepalived,linux</a> <a href="/tags/lvs-linux-web/" style="font-size: 10px;">lvs,linux,web</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/mysql-binlog-recovery-shell/" style="font-size: 10px;">mysql,binlog,recovery,shell</a> <a href="/tags/mysql-engine/" style="font-size: 10px;">mysql,engine</a> <a href="/tags/mysql-trouble/" style="font-size: 10px;">mysql,trouble</a> <a href="/tags/python/" style="font-size: 15px;">python</a> <a href="/tags/router/" style="font-size: 10px;">router</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/team/" style="font-size: 10px;">team</a> <a href="/tags/运维/" style="font-size: 10px;">运维</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a> <a href="/tags/项目经理/" style="font-size: 10px;">项目经理</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">奥巴马的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">卡卡的美丽传说</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">本泽马的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">吉格斯的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">习大大大不同</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">托蒂的博客</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">我是谁，我从哪里来，我到哪里去？我就是我，是颜色不一样的吃货…</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">John Doe</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="null" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">John Doe</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="/#" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="/#" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/#" title="rss">rss</a>
+			        
+						<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-centos-6下升级配置Python" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2012/11/13/centos-6下升级配置Python/" class="article-date">
+  	<time datetime="2012-11-13T01:06:06.000Z" itemprop="datePublished">2012-11-13</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      centos 6下升级配置Python
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/centos/">centos</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/">python</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Centos 6系统默认的python版本为2.4.3，鉴于平时接触的最多是2.7.3，该版本下<br>的第三方模块多，稳定且问题较少，大家用的也很普遍，且据说该版是3.0版的基石，<br>所以准备升级python至该版，安装过程中，需要注意一个问题：centos 6下的系统包<br>管理工具Yum是运行在python 2.4.3下的，所以安装完python新版后，<br>需要配置下yum执行脚本的python版本。<br>详细安装和配置过程如下文：<br><a id="more"></a></p>
+<p>##安装python2.7.3<br>建立安装目录<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#mkdir -p /data/packages/</span><br></pre></td></tr></table></figure></p>
+<p>下载源码：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#wget http://python.org/ftp/python/2.7.3/Python-2.7.3.tar.bz2&#10;#cd /data/packages/</span><br></pre></td></tr></table></figure></p>
+<p>解压：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#tar -jxvf Python-2.7.3.tar.bz2</span><br></pre></td></tr></table></figure></p>
+<p>配置：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#cd Python-<span class="number">2.7</span><span class="number">.3</span></span></span><br><span class="line"><span class="preprocessor">#./configure --prefix=/usr/local/python/</span></span><br></pre></td></tr></table></figure></p>
+<p>编译与安装：<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#<span class="built_in">make</span> &amp;&amp; <span class="built_in">make</span> install</span><br></pre></td></tr></table></figure></p>
+<p>检查当前版本：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="id">#python</span> -V</span><br></pre></td></tr></table></figure></p>
+<p>备份原来的版本：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#mv /usr/bin/python /usr/bin/python2<span class="number">.4</span><span class="number">.3</span></span></span><br></pre></td></tr></table></figure></p>
+<p>链接新版本：<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#ln -s <span class="regexp">/usr/</span>local<span class="regexp">/python/</span>bin<span class="regexp">/python /u</span>sr<span class="regexp">/bin/</span>python</span><br></pre></td></tr></table></figure></p>
+<p>检查默认路径：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="id">#which</span> python</span><br></pre></td></tr></table></figure></p>
+<p>检查当前版本：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="id">#python</span> -V</span><br></pre></td></tr></table></figure></p>
+<p>##修改yum的解释器<br>调整yum设置（否则不兼容）：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="id">#sed</span> -<span class="tag">i</span> <span class="string">'s#\#!/usr/bin/python#\#!/usr/bin/python2.4.3#'</span> /usr/bin/yum</span><br></pre></td></tr></table></figure></p>
+<p>检查修改结果：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="id">#head</span> /usr/bin/yum</span><br></pre></td></tr></table></figure></p>
+<p>测试下yum操作：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="id">#yum</span> search python</span><br></pre></td></tr></table></figure></p>
+<p>##安装setuptools<br>下载setuptools：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="id">#wget</span> http:<span class="comment">//pypi.python.org/packages/source/s/setuptools/setuptools-0.6c8.tar.gz#md5=0e9bbe1466f3ee29588cc09d3211a010 --no-check-certificate</span></span><br></pre></td></tr></table></figure></p>
+<p>解压：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="id">#tar</span> zxf setuptools-<span class="number">0.6</span>c8<span class="class">.tar</span><span class="class">.gz</span> </span><br><span class="line"><span class="id">#cd</span> setuptools-<span class="number">0.6</span>c8</span><br></pre></td></tr></table></figure></p>
+<p>安装setuptools ：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="id">#python</span> setup<span class="class">.py</span> install</span><br><span class="line"><span class="id">#cd</span> ..</span><br></pre></td></tr></table></figure></p>
+<p>##安装pip<br>下载pip源码：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="id">#wget</span> https:<span class="comment">//github.com/pypa/pip/archive/develop.zip</span></span><br></pre></td></tr></table></figure></p>
+<p>解压：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="id">#unzip</span> develop<span class="class">.zip</span></span><br><span class="line"><span class="id">#cd</span> pip-develop/</span><br></pre></td></tr></table></figure></p>
+<p>安装pip ：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="id">#python</span> setup<span class="class">.py</span> install</span><br></pre></td></tr></table></figure></p>
+<p>无法检测到安装好的Pip：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="id">#which</span> pip</span><br></pre></td></tr></table></figure></p>
+<p>so，需要将pip执行文件链接到系统用户执行文件目录：<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#ln <span class="regexp">/usr/</span>local<span class="regexp">/python/</span>bin<span class="regexp">/pip /u</span>sr<span class="regexp">/bin/</span>pip</span><br></pre></td></tr></table></figure></p>
+<p>检查 pip安装结果：<br><figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root<span class="variable">@node1</span> pip-develop]<span class="comment"># pip -V</span></span><br><span class="line">pip <span class="number">1.5</span>.dev1 from /usr/local/python/<span class="class"><span class="keyword">lib</span>/<span class="title">python2</span>.7/<span class="title">site</span>-<span class="title">packages</span>/<span class="title">pip</span>-1.5.<span class="title">dev1</span>-<span class="title">py2</span>.7.<span class="title">egg</span> (<span class="title">python</span> 2.7)</span></span><br></pre></td></tr></table></figure></p>
+<p>当然，也可以将以上路径添加到$PATH  ;</p>
+<p>##清空下历史记录：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="id">#history</span> -c</span><br></pre></td></tr></table></figure></p>
+<p>好了！centos 6下的python2.7环境搭建完毕！</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2013/02/23/个人与团队/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          个人与团队
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2012/08/13/archlinux-dairy-setup/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">archlinux-安装与配置手记</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="centos-6下升级配置Python" data-title="centos 6下升级配置Python" data-url="http://yoursite.com/2012/11/13/centos-6下升级配置Python/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2015 John Doe
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>
