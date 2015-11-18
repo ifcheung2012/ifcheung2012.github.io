@@ -215,8 +215,8 @@
             
               
                 
-                <a class="post-title-link" href="/2012/08/13/archlinux-dairy-setup/" itemprop="url">
-                  archlinux-安装与配置手记
+                <a class="post-title-link" href="/2013/11/12/mysql索引相关摘要与实验/" itemprop="url">
+                  mysql索引相关摘要与实验
                 </a>
               
             
@@ -226,8 +226,8 @@
         <div class="post-meta">
           <span class="post-time">
             发表于
-            <time itemprop="dateCreated" datetime="2012-08-13T06:46:51+08:00" content="2012-08-13">
-              2012-08-13
+            <time itemprop="dateCreated" datetime="2013-11-12T11:26:20+08:00" content="2013-11-12">
+              2013-11-12
             </time>
           </span>
 
@@ -237,8 +237,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2012/08/13/archlinux-dairy-setup/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2012/08/13/archlinux-dairy-setup/" itemprop="commentsCount"></span>
+                <a href="/2013/11/12/mysql索引相关摘要与实验/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2013/11/12/mysql索引相关摘要与实验/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -258,9 +258,13 @@
 
       
         
-          <p>这几天的模拟测试发现，linux最吸引人的就是shell，其他都是浮云！尤其是部署web集群、mysql主从复<br>制、密钥分发、主机监控等，只要是一伙机器完成的工作，都可以做到自动地、批量的、可定制的操作。桌面<br>应用仅仅是掩人耳目，当然搞桌面的那堆人（尤其是gnome）那UX设计能力烂的简直让人无力吐槽！！<br>archlinux是Linux分支下一款轻量的发行版，特点是：简洁、系统轻量、软件更新速度快。<br>以前用ubuntu作为主力桌面，感觉有些臃肿，于是想换到arch下，预期目标:<br>archlinux+xfce4+zsh ，详细的配置内容请见下文：<br>
+          <h1 id="1_索引的优化">1    索引的优化</h1><h2 id="1-1_索引介绍">1.1 索引介绍</h2><p>什么是索引<br>索引类似于书的目录，主要用于提高查询效率，也就是按条件查询的时候，先查询索引，再通过索引找到相关的数据，索引相当于记录了对某个关键词，指定到不同的文件，或者文件里的不同位置，当然索引自身也是通过文件来保存的。<br>索引的原理？为什么索引会加快查询速度？</p>
+<p>索引的类型<br>有两种基本的索引结构，也就是索引文件的保存方式，一个是顺序索引，就是根据值的顺序排序的（这个文件里面的值，也就是为其建索引的字段值，是顺序的放在索引文件里面），另外一个是散列索引，就是将值平均分配到若干散列桶中，通过散列函数定位的。</p>
+<h3 id="1-1-1_顺序索引">1.1.1    顺序索引</h3><p><strong> 顺序索引下面又有很多概念。 </strong></p>
+<p>1、如果被索引的字段本身按照一定的顺序排序，那么这种索引叫做聚集索引。否则叫做非聚集索引。<br>2、如果被索引的字段的每个值都有一个索引与其对应，那么这种索引叫做稠密索引，否则叫做稀疏索引。</p>
+<p>3、顺序索引分为两类，单级索引（不怎么用）和多级索引（通常是B+树，大量使用）。<br>a、单级索引就是把所有的索引字段以及对应的文件位置按顺序一个个的排列出来，这种索引查找起来比较慢，因为是顺序存储的，可以使用二分查找法，但是总体来说效率不高，这种索引是最基础的索引，一般不用，ORACLE里面好像不支持这种索引。<br>b、多级索引实际上就是在单级索引之上再加索引（稀疏索引），也就是指向索引的索引，二级索引上面还可以再加三级索引，可以不停的加，加到最后最上层只剩下一个节点（根节点），就成了一个树状结构了。</p>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2012/08/13/archlinux-dairy-setup/#more" rel="contents">
+            <a class="btn" href="/2013/11/12/mysql索引相关摘要与实验/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -303,8 +307,8 @@
             
               
                 
-                <a class="post-title-link" href="/2010/11/23/eas系统之基础数据/" itemprop="url">
-                  EAS系统之基础数据
+                <a class="post-title-link" href="/2013/11/12/慧律禅师精粹/" itemprop="url">
+                  慧律禅师精粹
                 </a>
               
             
@@ -314,8 +318,8 @@
         <div class="post-meta">
           <span class="post-time">
             发表于
-            <time itemprop="dateCreated" datetime="2010-11-23T09:59:46+08:00" content="2010-11-23">
-              2010-11-23
+            <time itemprop="dateCreated" datetime="2013-11-12T10:56:28+08:00" content="2013-11-12">
+              2013-11-12
             </time>
           </span>
 
@@ -325,112 +329,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2010/11/23/eas系统之基础数据/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2010/11/23/eas系统之基础数据/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <ul>
-<li>这几天主要是搞定基础数据在EAS中的导入工作，工作内容是看似很简单，工作过程却艰辛异常，今天小总结一下，分别从项目管理、操作过程、技术辅助三个层面阐述一下该过程的关键内容。
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2010/11/23/eas系统之基础数据/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2009/09/12/hexo-blog-on-github/" itemprop="url">
-                  hexo blog on github
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2009-09-12T21:40:23+08:00" content="2009-09-12">
-              2009-09-12
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/blog/" itemprop="url" rel="index">
-                    <span itemprop="name">blog</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2009/09/12/hexo-blog-on-github/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2009/09/12/hexo-blog-on-github/" itemprop="commentsCount"></span>
+                <a href="/2013/11/12/慧律禅师精粹/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2013/11/12/慧律禅师精粹/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -452,14 +352,284 @@
         
           <span itemprop="articleBody">
             
-              <ul>
-<li>github的好处：纯净、无广告、无逆天文本编辑器、发布方便；免费、流量无限制；</li>
-<li>其实还是有些繁琐，如图片、视频、排版（指修改或调整时）；</li>
-<li>总之某些人喜欢,也有很多人讨厌！！</li>
-</ul>
+              <p>案无多书，心不少书；循而渐进，持而不衰。战虽有阵，而用为本；丧虽有礼，而哀为本；士虽有学，而行为本。天下之势，以渐而成；天下之事，以积而固。处难处之事愈宜宽，处难处之人愈宜厚。处至急之事愈宜缓，处重大之事愈宜平和，处疑难之事愈宜无意。缓事急干，敏则有功；急事缓办；忙则出错。不自省者，看不出一身病痛；不耐烦者，做不成一件事业。谋人事如己事，而后虑之也审；谋己事如人事，而后见之也明。天下无不可化之人，但恐诚心未至；天下无不可为之事，只怕立志不坚。不近人情，举足尽是危机；不体物情，一生俱成梦境。</p>
 
             
           </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2013/11/11/疑行无名，疑事无功/" itemprop="url">
+                  疑行无名，疑事无功[网摘]
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2013-11-11T10:05:49+08:00" content="2013-11-11">
+              2013-11-11
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2013/11/11/疑行无名，疑事无功/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2013/11/11/疑行无名，疑事无功/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <p>孝公既用卫鞅，鞅欲变法，恐天下议己。<br>卫鞅曰：“疑行无名，疑事无功。且夫有高人之行者，固见非於世；有独知之虑者，必见敖於民。愚者暗於成事，知者见於未萌。民不可与虑始而可与乐成。论至德者不和於俗，成大功者不谋於众。是以圣人苟可以强国，不法其故；苟可以利民，不循其礼。”<br>孝公曰：“善。”</p>
+<p>甘龙曰：“不然。圣人不易民而教，知者不变法而治。因民而教，不劳而成功；缘法而治者，吏习而民安之。”<br>卫鞅曰：“龙之所言，世俗之言也。常人安於故俗，学者溺於所闻。以此两者居官守法可也，非所与论於法之外也。三代不同礼而王，五伯不同法而霸。智者作法，愚者制焉；贤者更礼，不肖者拘焉。”<br>杜挚曰：“利不百，不变法；功不十，不易器。法古无过，循礼无邪。”<br>卫鞅曰：“治世不一道，便国不法古。故汤武不循古而王，夏殷不易礼而亡。反古者不可非，而循礼者不足多。”<br>孝公曰：“善。”<br>以卫鞅为左庶长，卒定变法之令。</p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2013/11/01/ssh-rsync-nfs-lamp测试笔记/" itemprop="url">
+                  ssh密钥分发_rsync同步_nfs_lamp服务搭建笔记
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2013-11-01T20:02:23+08:00" content="2013-11-01">
+              2013-11-01
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2013/11/01/ssh-rsync-nfs-lamp测试笔记/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2013/11/01/ssh-rsync-nfs-lamp测试笔记/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p>刚刚做了一次服务搭建模拟，然后形成了doc笔记，出于便捷性，感觉还是形成blog最好，so，就将doc转成了markdown了。<br>这篇文章《ssh密钥分发_rsync同步_nfs_lamp服务搭建笔记》是比较简单的网站架构，感觉还是挺中肯的，实际应用还是<br>要根据需求来决定的，这里就不分析了。</p>
+<h3 id="文章结构，如下：">文章结构，如下：</h3><blockquote>
+<p>1    总体架构图<br>2    数据流说明<br>3    生产环境搭建需求<br>3.1    软件需求<br>3.2    IP地址需求<br>3.3    服务器需求<br>3.4    架构需求<br>4    涉及到的技术<br>5    总结架构中的优缺点<br>6   详细搭建过程</p>
+</blockquote>
+<p>总的来讲，好记性不如烂笔头，还是记下为妙，任何时候，还是要参看文档，而非经验！<br>好了！不多说了，‘冻’手了…<br>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2013/11/01/ssh-rsync-nfs-lamp测试笔记/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2013/10/22/mysql存储引擎学习笔记/" itemprop="url">
+                  mysql存储引擎学习笔记
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2013-10-22T09:46:08+08:00" content="2013-10-22">
+              2013-10-22
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2013/10/22/mysql存储引擎学习笔记/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2013/10/22/mysql存储引擎学习笔记/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p>mysql存储引擎在网站架构应用中相当重要，如：mysql读写分类、主从设计等，那么mysql有哪些常用的引擎呢？这些存储引擎各有哪些特色？他们又通常应用在哪类场景下呢？如何应用呢？<br>本文通过学习、交流、网摘、讨论最终形成了这份文档，用以备忘。</p>
+<blockquote>
+<p>但鉴于个人自己测试，很多地方没有覆盖到的，今后再补充吧</p>
+</blockquote>
+<p>关于官方介绍：<strong> 建议参考：mysql_5.1中文参考文档 （14-16章）</strong></p>
+<h2 id="MYSQL存储引擎概述">MYSQL存储引擎概述</h2><p>MySQL表存储结构是MySQL数据库的重要组成部分，下面就为您介绍3种主要MySQL表存储结构–MyISAM、InnoDB和NDBCluster。实际上MYSQL不仅可以同时使用多种存储引擎，而且每种存储引擎和MYSQL之间通过插件的方式使用。下面是MYSQL存储引擎体系结构简图：</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2013/10/22/mysql存储引擎学习笔记/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
         
       
     </div>
@@ -483,7 +653,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -548,6 +718,16 @@
         
 
         <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="" target="_blank">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </span>
+            
           
         </div>
 
