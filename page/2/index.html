@@ -187,11 +187,96 @@
 
     
     
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2013/11/26/mysql生产环境问题分析案例/" itemprop="url">
+                  mysql生产环境问题分析案例
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2013-11-26T16:41:49+08:00" content="2013-11-26">
+              2013-11-26
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2013/11/26/mysql生产环境问题分析案例/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2013/11/26/mysql生产环境问题分析案例/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
       
       
 
       
-    
+        
+          <h2 id="生产数据丢失分享案例一">生产数据丢失分享案例一</h2><h3 id="故障分析与解决：">故障分析与解决：</h3><p>1、网站服务器负载很高(&gt;5)<br>2、通过日志文件发现慢查询语句<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@node2 3306]# grep slow my.cnf&#10;log-slow-queries =/data/mysql/3306/slow.log</span><br></pre></td></tr></table></figure></p>
+<p>可以对这个日志进行优化，将未建索引的满查询也置入该日志，然后自动化检测。<br>3、找到目标，确定需要优化的语句，查看其条件列，explain下有无走索引<br>4、分析各条件列，count各列的唯一值，确定索引方案（大表的，常用的列）<br>5、咨询研发经理，创建联合索引，如果是大表，创建索引很耗时间，最好在业务流量低谷时创建索引<br>6、测试优化调整后的结果，即是否解决了问题并起到了效果？。</p>
+<h2 id="生产数据丢失分享案例二（一主两从）">生产数据丢失分享案例二（一主两从）</h2>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2013/11/26/mysql生产环境问题分析案例/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
 
     
       
@@ -566,98 +651,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2013/11/12/mysql索引相关摘要与实验/" itemprop="url">
-                  mysql索引相关摘要与实验
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2013-11-12T11:26:20+08:00" content="2013-11-12">
-              2013-11-12
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2013/11/12/mysql索引相关摘要与实验/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2013/11/12/mysql索引相关摘要与实验/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <h1 id="1_索引的优化">1    索引的优化</h1><h2 id="1-1_索引介绍">1.1 索引介绍</h2><p>什么是索引<br>索引类似于书的目录，主要用于提高查询效率，也就是按条件查询的时候，先查询索引，再通过索引找到相关的数据，索引相当于记录了对某个关键词，指定到不同的文件，或者文件里的不同位置，当然索引自身也是通过文件来保存的。<br>索引的原理？为什么索引会加快查询速度？</p>
-<p>索引的类型<br>有两种基本的索引结构，也就是索引文件的保存方式，一个是顺序索引，就是根据值的顺序排序的（这个文件里面的值，也就是为其建索引的字段值，是顺序的放在索引文件里面），另外一个是散列索引，就是将值平均分配到若干散列桶中，通过散列函数定位的。</p>
-<h3 id="1-1-1_顺序索引">1.1.1    顺序索引</h3><p><strong> 顺序索引下面又有很多概念。 </strong></p>
-<p>1、如果被索引的字段本身按照一定的顺序排序，那么这种索引叫做聚集索引。否则叫做非聚集索引。<br>2、如果被索引的字段的每个值都有一个索引与其对应，那么这种索引叫做稠密索引，否则叫做稀疏索引。</p>
-<p>3、顺序索引分为两类，单级索引（不怎么用）和多级索引（通常是B+树，大量使用）。<br>a、单级索引就是把所有的索引字段以及对应的文件位置按顺序一个个的排列出来，这种索引查找起来比较慢，因为是顺序存储的，可以使用二分查找法，但是总体来说效率不高，这种索引是最基础的索引，一般不用，ORACLE里面好像不支持这种索引。<br>b、多级索引实际上就是在单级索引之上再加索引（稀疏索引），也就是指向索引的索引，二级索引上面还可以再加三级索引，可以不停的加，加到最后最上层只剩下一个节点（根节点），就成了一个树状结构了。</p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2013/11/12/mysql索引相关摘要与实验/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
@@ -704,21 +697,21 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">22</span>
+              <span class="site-state-item-count">23</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
-              <span class="site-state-item-count">1</span>
+              <span class="site-state-item-count">2</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">33</span>
+              <span class="site-state-item-count">37</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
@@ -771,7 +764,7 @@
       <div class="footer-inner">
         <div class="copyright" >
   
-  &copy;  2011 - 
+  &copy;  2010 - 
   <span itemprop="copyrightYear">2015</span>
   <span class="with-love">
     <i class="icon-next-heart fa fa-heart"></i>

@@ -51,16 +51,22 @@
 
 
 
-<meta name="description" content="这几天的模拟测试发现，linux最吸引人的就是shell，其他都是浮云！尤其是部署web集群、mysql主从复制、密钥分发、主机监控等，只要是一伙机器完成的工作，都可以做到自动地、批量的、可定制的操作。桌面应用仅仅是掩人耳目，当然搞桌面的那堆人（尤其是gnome）那UX设计能力烂的简直让人无力吐槽！！archlinux是Linux分支下一款轻量的发行版，特点是：简洁、系统轻量、软件更新速度快。以前">
+<meta name="description" content="这几天的模拟生产系统发现，linux最吸引人的就是shell，其他都是浮云！尤其是部署web集群、mysql主从复制、密钥分发、主机监控等，只要是一伙机器完成的工作，都可以做到自动地、批量的、可定制的操作。桌面应用仅仅是掩人耳目，当然搞桌面的那堆人（尤其是gnome）那UX设计能力烂的简直让人无力吐槽！！
+今天，将这些天捣鼓的东西形成笔记，哪天有想起arch，有个指导 ^_^
+archlinux是">
 <meta property="og:type" content="article">
 <meta property="og:title" content="archlinux-安装与配置手记">
 <meta property="og:url" content="http://ifcheung2012.github.io/2012/08/13/archlinux-dairy-setup/index.html">
 <meta property="og:site_name" content="IF's blog">
-<meta property="og:description" content="这几天的模拟测试发现，linux最吸引人的就是shell，其他都是浮云！尤其是部署web集群、mysql主从复制、密钥分发、主机监控等，只要是一伙机器完成的工作，都可以做到自动地、批量的、可定制的操作。桌面应用仅仅是掩人耳目，当然搞桌面的那堆人（尤其是gnome）那UX设计能力烂的简直让人无力吐槽！！archlinux是Linux分支下一款轻量的发行版，特点是：简洁、系统轻量、软件更新速度快。以前">
-<meta property="og:updated_time" content="2015-11-18T09:59:15.000Z">
+<meta property="og:description" content="这几天的模拟生产系统发现，linux最吸引人的就是shell，其他都是浮云！尤其是部署web集群、mysql主从复制、密钥分发、主机监控等，只要是一伙机器完成的工作，都可以做到自动地、批量的、可定制的操作。桌面应用仅仅是掩人耳目，当然搞桌面的那堆人（尤其是gnome）那UX设计能力烂的简直让人无力吐槽！！
+今天，将这些天捣鼓的东西形成笔记，哪天有想起arch，有个指导 ^_^
+archlinux是">
+<meta property="og:updated_time" content="2015-11-19T01:04:37.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="archlinux-安装与配置手记">
-<meta name="twitter:description" content="这几天的模拟测试发现，linux最吸引人的就是shell，其他都是浮云！尤其是部署web集群、mysql主从复制、密钥分发、主机监控等，只要是一伙机器完成的工作，都可以做到自动地、批量的、可定制的操作。桌面应用仅仅是掩人耳目，当然搞桌面的那堆人（尤其是gnome）那UX设计能力烂的简直让人无力吐槽！！archlinux是Linux分支下一款轻量的发行版，特点是：简洁、系统轻量、软件更新速度快。以前">
+<meta name="twitter:description" content="这几天的模拟生产系统发现，linux最吸引人的就是shell，其他都是浮云！尤其是部署web集群、mysql主从复制、密钥分发、主机监控等，只要是一伙机器完成的工作，都可以做到自动地、批量的、可定制的操作。桌面应用仅仅是掩人耳目，当然搞桌面的那堆人（尤其是gnome）那UX设计能力烂的简直让人无力吐槽！！
+今天，将这些天捣鼓的东西形成笔记，哪天有想起arch，有个指导 ^_^
+archlinux是">
 
 
 
@@ -242,17 +248,19 @@
       
 
       
-        <span itemprop="articleBody"><p>这几天的模拟测试发现，linux最吸引人的就是shell，其他都是浮云！尤其是部署web集群、mysql主从复<br>制、密钥分发、主机监控等，只要是一伙机器完成的工作，都可以做到自动地、批量的、可定制的操作。桌面<br>应用仅仅是掩人耳目，当然搞桌面的那堆人（尤其是gnome）那UX设计能力烂的简直让人无力吐槽！！<br>archlinux是Linux分支下一款轻量的发行版，特点是：简洁、系统轻量、软件更新速度快。<br>以前用ubuntu作为主力桌面，感觉有些臃肿，于是想换到arch下，预期目标:<br>archlinux+xfce4+zsh ，详细的配置内容请见下文：<br><a id="more"></a></p>
+        <span itemprop="articleBody"><p>这几天的模拟生产系统发现，linux最吸引人的就是shell，其他都是浮云！尤其是部署web集群、mysql主从复<br>制、密钥分发、主机监控等，只要是一伙机器完成的工作，都可以做到自动地、批量的、可定制的操作。桌面<br>应用仅仅是掩人耳目，当然搞桌面的那堆人（尤其是gnome）那UX设计能力烂的简直让人无力吐槽！！</p>
+<p>今天，将这些天捣鼓的东西形成笔记，哪天有想起arch，有个指导 ^_^</p>
+<p>archlinux是Linux分支下一款轻量的发行版，特点是：简洁、系统轻量、软件更新速度快。<br>以前用ubuntu作为主力桌面，感觉有些臃肿，于是想换到arch下，预期目标:<br>archlinux+xfce4+zsh ，详细的配置内容请见下文：<br><a id="more"></a></p>
 <h2 id="分区与安装">分区与安装</h2><p>分区方面，我用的lvm，因为是win+arch双系统，开始给arch的分区比较小，随着arch下堆的越来越多，<br>当然要求分区的伸缩性要强，于是参照官方wiki，建立lvm分区的基础上，安装了arch的基础系统，步骤<br>请参照官方wiki，这里不再赘述了！！</p>
 <h2 id="系统引导菜单grub">系统引导菜单grub</h2><p>archlinux安装完成后，grub默认将WINDOWS的启动菜单“抹去”了，其实安装<br>os-probe，直接在GRUB2中找回WINDOWS菜单；</p>
-<h2 id="安装第三方源管理工具">安装第三方源管理工具</h2><p>archlinux 2012年的版本貌似默认没有安装yaourt，有些包就装不了了,所以先要安装<br>这东西，如下步骤自行编译后完成：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#pacman -S base-devel&#10;#wget http://aur.archlinux.org/packages/package-query/package-query.tar.gz&#10;#tar zxvf package-query.tar.gz&#10;#cd package-query&#10;#makepkg -si&#10;#cd ..&#10;#wget http://aur.archlinux.org/packages/yaourt/yaourt.tar.gz&#10;#tar zxvf yaourt.tar.gz&#10;#cd yaourt&#10;#makepkg -si&#10;#cd ..</span><br></pre></td></tr></table></figure></p>
+<h2 id="安装第三方源管理工具">安装第三方源管理工具</h2><p>archlinux 2012年的版本貌似默认没有安装yaourt，有些包就装不了了,所以先要安装<br>这东西，如下步骤自行编译后完成：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">#pacman -S base-devel</span><br><span class="line">#wget http://aur.archlinux.org/packages/package-query/package-query.tar.gz</span><br><span class="line">#tar zxvf package-query.tar.gz</span><br><span class="line">#cd package-query</span><br><span class="line">#makepkg -si</span><br><span class="line">#cd ..</span><br><span class="line">#wget http://aur.archlinux.org/packages/yaourt/yaourt.tar.gz</span><br><span class="line">#tar zxvf yaourt.tar.gz</span><br><span class="line">#cd yaourt</span><br><span class="line">#makepkg -si</span><br><span class="line">#cd ..</span><br></pre></td></tr></table></figure></p>
 <h2 id="编译环境搭建">编译环境搭建</h2><p>查看<a href="http://aur.archlinux.org/" target="_blank" rel="external">archlinux 编译环境搭建</a> 很方便</p>
 <h2 id="X、显卡、声卡">X、显卡、声卡</h2><p>archlinux 基础系统、X服务的安装请参照官方wiki ;<br>nvidia显卡的安装要注意头文件: kernel.h ,没有的话参照官方wiki安装系统开发库；<br>audio 声卡的安装：安装alsa-oss:<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="id">#pacman</span> -S alsa-oss alsa-utils alsa-lib</span><br></pre></td></tr></table></figure></p>
 <p>然后 gpasswd myusername to audio group ，然后看下声卡列表：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="id">#aplay</span> -l</span><br></pre></td></tr></table></figure></p>
 <p>看下自己的声卡名称，将该名称添加到当前用户Home下的 “.asoundrc” ，然后change the ‘card 2’to ‘card 3’ ,然后,it work!</p>
 <h2 id="第三方源">第三方源</h2><p>安装yaourt后，你可以安装官方源中未发布的软件，这些软件都在非正式库中，如:wine-qq等；<br><a href="http://www.linuxidc.com/Linux/2012-09/69656.htm" target="_blank" rel="external">参照链接</a><br>修改 /etc/pacman.conf 文件, 添加<br><figure class="highlight xquery"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[archlinuxfr]</span><br><span class="line">Server = http://repo.archlinux.fr/<span class="variable">$arch</span></span><br><span class="line">pacman -S yaourt</span><br></pre></td></tr></table></figure></p>
-<h2 id="桌面美化(3D、渐变等)">桌面美化(3D、渐变等)</h2><p>安装Compiz：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pacman -S ccsm compiz-core compiz-decorator-gtk compiz-fusion-plugins-extra compiz-fusion-plugins-main compiz-manager compizconfig-backend-gconf compizconfig-python fusion-icon fusion-icon</span><br></pre></td></tr></table></figure></p>
-<p>具体装的什么，看下名称 就知道了，其中ccsm就是CompizConfig Settings Manager的缩写，打开fusion-icon时，右键会将ccsm自动带出，否则没有该菜单，默认打开fusion-icon是会取消标题栏的，其无法按住ALT移动，其实是COMPIZ未开设置：右键选择FUSION－ICON中的setting manaer,在window management中选择：move window, place window, resize window, put等选项；Effect中选：window decoration(没这个就没窗口标题栏了), 3D window, cube gears, wobbly windows等效果<br>在genaeral中选择：gnome compatiblity，我的没装GNOME，用的XFCE4，所以什么都没选；<br>继续安装主题：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo pacman -S emerald emerald-themes</span><br></pre></td></tr></table></figure></p>
+<h2 id="桌面美化(3D、渐变等)">桌面美化(3D、渐变等)</h2><p>安装Compiz：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pacman -S ccsm compiz-core compiz-decorator-gtk compiz-fusion-plugins-extra compiz-fusion-plugins-main compiz-manager compizconfig-backend-gconf compizconfig-python fusion-icon fusion-icon</span><br></pre></td></tr></table></figure></p>
+<p>具体装的什么，看下名称 就知道了，其中ccsm就是CompizConfig Settings Manager的缩写，打开fusion-icon时，右键会将ccsm自动带出，否则没有该菜单，默认打开fusion-icon是会取消标题栏的，其无法按住ALT移动，其实是COMPIZ未开设置：右键选择FUSION－ICON中的setting manaer,在window management中选择：move window, place window, resize window, put等选项；Effect中选：window decoration(没这个就没窗口标题栏了), 3D window, cube gears, wobbly windows等效果<br>在genaeral中选择：gnome compatiblity，我的没装GNOME，用的XFCE4，所以什么都没选；<br>继续安装主题：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo pacman -S emerald emerald-themes</span><br></pre></td></tr></table></figure></p>
 <p>打开fusion-icon后，右键会将emerald自动带出，否则没有该菜单；<br>另外，ccsm-&gt;general-&gt;desktopsize中的number of desktops要设置成1；否则当前工作区数量＝系统设置数4＊CCSM设置数4＝16个;<br>该设置方法完全百度的，其实没什么，我的总结是：装了COMPIZ后，系统将窗口管理的部分任务直接交接给<br>了compiz，所以要设置的仔细一点，就要熟练compiz的基本设置，当然对于洒家来讲，有无compiz无所谓；<br>该问题的解决方案来自：<a href="http://www.tootoogo.org/wordpress/" target="_blank" rel="external">链接</a> ，该博主文笔不错！<br>对了，以前我在SUSE10下装COMPIZ，那时只有CCSM，还没有FUSION－ICON，然后在SUSE的SETTING里<br>有个APPEARANCE里够选COMPIZ效果打开的，现在有了FUSION－ICON可以集成管理，主要说明了一个问题<br>：在产品还未成熟前就用，那会耗费你的精力和时间，所以不要麻木跟风；</p>
 <h2 id="shell优化:zsh的安装">shell优化:zsh的安装</h2><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo pacman -S zsh zsh-lovers zshdb  &#37117;&#35828;zsh&#22909;&#65292;&#35013;&#23436;&#20043;&#21518;  &#24863;&#35273;&#20063;&#19981;&#21643;&#28404;&#65292;&#28014;&#20113;&#65307;&#10;sudo pacman -S  skype skype-call-recorder  &#36825;&#19996;&#35199;&#30340;&#26381;&#21153;&#26159;&#20184;&#36153;&#30340;&#65292;&#20320;&#25026;&#30340;&#65307;&#10;sudo yaourt -S dukto-svn         &#36825;&#19996;&#35199;&#20570;&#30340;&#19981;&#38169;&#65292;&#36328;&#24179;&#21488;&#20256;&#36755;&#25991;&#20214;&#65292;&#19981;&#36807;&#35805;&#21448;&#35828;&#22238;&#26469;&#20102;&#65292;IPMSG &#39134;&#40509; &#19981;&#20063;&#26159;&#30340;&#20040;&#65307;&#10;sudo pacman -S ntfs-3g         &#35201;&#21152;&#20010;&#30828;&#30424;&#19978;&#21435;  &#24517;&#39035;&#25630;&#36825;&#20010;&#65292;NND  &#26377;&#20010;SATA&#30828;&#30424;&#24635;&#26159;&#25346;&#19981;&#19978;&#21435;&#65307;</span><br></pre></td></tr></table></figure>
 <h2 id="设计工具(草图、概念设计等)">设计工具(草图、概念设计等)</h2><p>画图用的两个PENCIL，第一个是设计，第二个是手工草图<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo yaourt -S evolus-pencil-svn </span><br><span class="line">```   </span><br><span class="line">后来还是被我删掉了，主要是我的FF已经到了<span class="number">16.0</span><span class="number">.1</span>了，而pencil的版本最大到<span class="number">14.0</span></span><br></pre></td></tr></table></figure></p>
@@ -437,21 +445,21 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">22</span>
+              <span class="site-state-item-count">23</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
-              <span class="site-state-item-count">1</span>
+              <span class="site-state-item-count">2</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">33</span>
+              <span class="site-state-item-count">37</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
@@ -521,7 +529,7 @@
       <div class="footer-inner">
         <div class="copyright" >
   
-  &copy;  2011 - 
+  &copy;  2010 - 
   <span itemprop="copyrightYear">2015</span>
   <span class="with-love">
     <i class="icon-next-heart fa fa-heart"></i>

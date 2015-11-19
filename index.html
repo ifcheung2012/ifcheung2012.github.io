@@ -187,15 +187,114 @@
 
     
     
+
+    
       
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2015/11/19/关于企业信息化规划/" itemprop="url">
+                  关于企业信息化规划
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2015-11-19T08:55:45+08:00" content="2015-11-19">
+              2015-11-19
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/信息化/" itemprop="url" rel="index">
+                    <span itemprop="name">信息化</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/11/19/关于企业信息化规划/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/11/19/关于企业信息化规划/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
       
-        
-        
-        
       
 
       
-    
+        
+          <span itemprop="articleBody">
+            
+            关于企业信息化规划的内容，一直是个疑点，于是花一段时间学习和借鉴线上线下、锅内锅外、行内行外的文章，结合自身的工作经历，形成一篇阶段性的认识和总结！
+
+            
+          </span>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2015/11/19/关于企业信息化规划/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
 
     
       
@@ -557,96 +656,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2013/11/26/mysql生产环境问题分析案例/" itemprop="url">
-                  mysql生产环境问题分析案例
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2013-11-26T16:41:49+08:00" content="2013-11-26">
-              2013-11-26
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2013/11/26/mysql生产环境问题分析案例/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2013/11/26/mysql生产环境问题分析案例/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <h2 id="生产数据丢失分享案例一">生产数据丢失分享案例一</h2><h3 id="故障分析与解决：">故障分析与解决：</h3><p>1、网站服务器负载很高(&gt;5)<br>2、通过日志文件发现慢查询语句<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@node2 3306]# grep slow my.cnf&#10;log-slow-queries =/data/mysql/3306/slow.log</span><br></pre></td></tr></table></figure></p>
-<p>可以对这个日志进行优化，将未建索引的满查询也置入该日志，然后自动化检测。<br>3、找到目标，确定需要优化的语句，查看其条件列，explain下有无走索引<br>4、分析各条件列，count各列的唯一值，确定索引方案（大表的，常用的列）<br>5、咨询研发经理，创建联合索引，如果是大表，创建索引很耗时间，最好在业务流量低谷时创建索引<br>6、测试优化调整后的结果，即是否解决了问题并起到了效果？。</p>
-<h2 id="生产数据丢失分享案例二（一主两从）">生产数据丢失分享案例二（一主两从）</h2>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2013/11/26/mysql生产环境问题分析案例/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
@@ -693,21 +702,21 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">22</span>
+              <span class="site-state-item-count">23</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
-              <span class="site-state-item-count">1</span>
+              <span class="site-state-item-count">2</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">33</span>
+              <span class="site-state-item-count">37</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
@@ -760,7 +769,7 @@
       <div class="footer-inner">
         <div class="copyright" >
   
-  &copy;  2011 - 
+  &copy;  2010 - 
   <span itemprop="copyrightYear">2015</span>
   <span class="with-love">
     <i class="icon-next-heart fa fa-heart"></i>
