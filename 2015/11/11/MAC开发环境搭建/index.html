@@ -51,26 +51,23 @@
 
 
 
-<meta name="description" content="目标环境架构图
-
-1、安装Homebrew1ruby -e &quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)&quot;
-2、安装python包管理工具pip及其虚拟环境12345678910111213141516brew install wget   //安装命令行下载工具sudo easy_">
+<meta name="description" content="从买mac到最近，差不多两年没重装过系统，unix系的文件系统比windows好许多，无需碎片整理，用久了，也不见系统性能下降，所以一直比较放心。但中途安装过许多环境，又下载了不少盗版软件，感觉环境比较乱，最近apple推出了captain，干脆，买u盘重装一遍！好了，上图：
+目标环境架构图
+1、安装Homebrew1ruby -e &quot;$(curl -fsSL https://raw.github">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MAC开发环境搭建">
 <meta property="og:url" content="http://ifcheung2012.github.io/2015/11/11/MAC开发环境搭建/index.html">
 <meta property="og:site_name" content="IF's blog">
-<meta property="og:description" content="目标环境架构图
-
-1、安装Homebrew1ruby -e &quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)&quot;
-2、安装python包管理工具pip及其虚拟环境12345678910111213141516brew install wget   //安装命令行下载工具sudo easy_">
+<meta property="og:description" content="从买mac到最近，差不多两年没重装过系统，unix系的文件系统比windows好许多，无需碎片整理，用久了，也不见系统性能下降，所以一直比较放心。但中途安装过许多环境，又下载了不少盗版软件，感觉环境比较乱，最近apple推出了captain，干脆，买u盘重装一遍！好了，上图：
+目标环境架构图
+1、安装Homebrew1ruby -e &quot;$(curl -fsSL https://raw.github">
 <meta property="og:image" content="http://7rfk7i.com1.z0.glb.clouddn.com/diary_osx%20environment%20config.png">
-<meta property="og:updated_time" content="2015-11-20T13:26:49.000Z">
+<meta property="og:updated_time" content="2015-11-20T13:39:27.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MAC开发环境搭建">
-<meta name="twitter:description" content="目标环境架构图
-
-1、安装Homebrew1ruby -e &quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)&quot;
-2、安装python包管理工具pip及其虚拟环境12345678910111213141516brew install wget   //安装命令行下载工具sudo easy_">
+<meta name="twitter:description" content="从买mac到最近，差不多两年没重装过系统，unix系的文件系统比windows好许多，无需碎片整理，用久了，也不见系统性能下降，所以一直比较放心。但中途安装过许多环境，又下载了不少盗版软件，感觉环境比较乱，最近apple推出了captain，干脆，买u盘重装一遍！好了，上图：
+目标环境架构图
+1、安装Homebrew1ruby -e &quot;$(curl -fsSL https://raw.github">
 
 
 
@@ -293,8 +290,8 @@
       
 
       
-        <span itemprop="articleBody"><p>目标环境架构图</p>
-<p><img src="http://7rfk7i.com1.z0.glb.clouddn.com/diary_osx%20environment%20config.png" alt="MAC开发环境搭建"></p>
+        <span itemprop="articleBody"><p>从买mac到最近，差不多两年没重装过系统，unix系的文件系统比windows好许多，无需碎片整理，用久了，也不见系统性能下降，所以一直比较放心。<br>但中途安装过许多环境，又下载了不少盗版软件，感觉环境比较乱，最近apple推出了captain，干脆，买u盘重装一遍！<br>好了，上图：</p>
+<h3 id="目标环境架构图">目标环境架构图</h3><p><img src="http://7rfk7i.com1.z0.glb.clouddn.com/diary_osx%20environment%20config.png" alt="MAC开发环境搭建"></p>
 <p>1、安装Homebrew<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ruby -e <span class="string">"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"</span></span><br></pre></td></tr></table></figure></p>
 <p>2、安装python包管理工具pip及其虚拟环境<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">brew install wget   <span class="comment">//安装命令行下载工具</span></span><br><span class="line">sudo easy_install pip   <span class="comment">//安装python包管理工具pip</span></span><br><span class="line">sudo pip install virtualenv    <span class="comment">//安装python开发库虚拟环境</span></span><br><span class="line">sudo pip install virtualenvwrapper  </span><br><span class="line"></span><br><span class="line">mkdir $HOME/.virtualenvs</span><br><span class="line"></span><br><span class="line">vim ~/.bashrc   <span class="comment">//修改bashrc，添加以下两行，方便virtualenv切换操作</span></span><br><span class="line">  export PIP_RESPECT_VIRTUALENV=<span class="keyword">true</span></span><br><span class="line">  export WORKON_HOME=$HOME/.virtualenvs</span><br><span class="line">  source /usr/local/bin/virtualenvwrapper.sh</span><br><span class="line"></span><br><span class="line">workon         <span class="comment">//显示已有的python环境列表</span></span><br><span class="line">mkvirtualenv lottornado</span><br><span class="line">mkvirtualenv lottdjango</span><br><span class="line">workon</span><br></pre></td></tr></table></figure></p>
 <p>3、安装vim，超帅的命令行编辑工具，平时用的少，但我觉得在mac上任意打开的工具都应该是唯美的，vim启示<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl https:<span class="comment">//j.mp/spf13-vim3 -L &gt; spf13-vim.sh &amp;&amp; sh spf13-vim.sh</span></span><br></pre></td></tr></table></figure></p>
@@ -442,7 +439,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">24</span>
+              <span class="site-state-item-count">23</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -513,7 +510,7 @@
               
             
             
-              <p class="post-toc-empty">此文章未包含目录</p>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#目标环境架构图"><span class="nav-number">1.</span> <span class="nav-text">目标环境架构图</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
